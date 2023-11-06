@@ -10,6 +10,21 @@ import json
 import random
 
 
+async def helper():
+    query = tables.posts.select()
+    posts = await database.fetch_all(query)
+
+    f = open(APP_ROOT + "/mock_data/posts.json")
+    json_posts = json.load(f)
+
+    for i in range(0, len(posts) - 1):
+        json_posts[i]['post_id'] = str(posts[i]['post_id'])
+
+    obj = json.dumps(json_posts, indent=4)
+    with open(APP_ROOT + "/mock_data/posts.json", "w") as outfile:
+        outfile.write(obj)
+
+
 async def gen_mock_passwords():
     f = open(APP_ROOT + "/mock_data/users.json")
     users = json.load(f)
@@ -129,7 +144,7 @@ async def populate_mock_data():
         print('no users in database. uploading mock user data...')
         f = open(APP_ROOT + "/mock_data/users.json")
         data = json.load(f)
-        user_data = [{k: v for k, v in row.items() if k in ['username', 'full_name']} for row in data]
+        user_data = [{k: v for k, v in row.items() if k in ['username', 'full_name', 'bio']} for row in data]
         query = insert(tables.users)
         async with database.transaction():
             await database.execute_many(query, user_data)
@@ -167,7 +182,7 @@ async def populate_mock_data():
         print('no posts in database. uploading mock user data...')
         f = open(APP_ROOT + "/mock_data/posts.json")
         data = json.load(f)
-        post_data = [{k: v for k, v in row.items() if k in ['username', 'content']} for row in data]
+        post_data = [{k: v for k, v in row.items() if k in ['username', 'content', 'post_id']} for row in data]
         query = insert(tables.posts)
         async with database.transaction():
             await database.execute_many(query, post_data)

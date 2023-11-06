@@ -61,7 +61,7 @@ async def shutdown():
 @app.get("/util")
 async def util():
     print("helping!")
-    # await helper.create_followers()
+    await helper.helper()
     # await helper.create_followings()
     # await helper.create_likes()
     # await helper.populate_mock_data()

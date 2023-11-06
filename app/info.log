@@ -942,3 +942,62 @@ INFO:server:rid=Y078DI start request path=/client/me
 INFO:server:rid=Y078DI completed_in=17.52ms status_code=200
 INFO:server:rid=3SFIJ7 start request path=/client/me
 INFO:server:rid=3SFIJ7 completed_in=21.34ms status_code=200
+INFO:server:rid=E7IOYL start request path=/docs
+INFO:server:rid=E7IOYL completed_in=3.08ms status_code=200
+INFO:server:rid=19EPRL start request path=/openapi.json
+INFO:server:rid=19EPRL completed_in=3.22ms status_code=200
+INFO:server:rid=ECPUUH start request path=/docs
+INFO:server:rid=ECPUUH completed_in=4.38ms status_code=200
+INFO:server:rid=3U8041 start request path=/openapi.json
+INFO:server:rid=3U8041 completed_in=2.11ms status_code=200
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=HN349J start request path=/docs
+INFO:server:rid=HN349J completed_in=1.21ms status_code=200
+INFO:server:rid=65EHDP start request path=/openapi.json
+INFO:server:rid=65EHDP completed_in=24.43ms status_code=200
+INFO:server:rid=8RQ41B start request path=/token
+INFO:server:rid=8RQ41B completed_in=288.63ms status_code=200
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=WUKPA0 start request path=/docs
+INFO:server:rid=WUKPA0 completed_in=1.00ms status_code=200
+INFO:server:rid=NQGKPQ start request path=/openapi.json
+INFO:server:rid=NQGKPQ completed_in=25.62ms status_code=200
+INFO:server:rid=WG1G2R start request path=/util
+INFO:server:rid=WG1G2R completed_in=18.53ms status_code=200
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=9R53YZ start request path=/docs
+INFO:server:rid=9R53YZ completed_in=1.15ms status_code=200
+INFO:server:rid=4G2OAK start request path=/openapi.json
+INFO:server:rid=4G2OAK completed_in=50.97ms status_code=200
+INFO:server:rid=PEDC2E start request path=/token
+INFO:server:rid=PEDC2E completed_in=295.43ms status_code=200
+INFO:server:rid=SLNME7 start request path=/client/users
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=FSBDO2 start request path=/client/users
+INFO:server:rid=FSBDO2 completed_in=19.57ms status_code=200
+INFO:server:rid=ZFA6OM start request path=/client/me
+INFO:server:rid=ZFA6OM completed_in=14.43ms status_code=200
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=9QPGHC start request path=/client/followers
+INFO:server:rid=9QPGHC completed_in=14.97ms status_code=200
+INFO:server:rid=MTPJ6G start request path=/client/following
+INFO:server:rid=MTPJ6G completed_in=8.00ms status_code=200
+INFO:server:rid=OD07OT start request path=/client/posts
+INFO:server:rid=OD07OT completed_in=21.17ms status_code=200
+INFO:server:rid=Y71A4J start request path=/client/likes
+INFO:server:rid=Y71A4J completed_in=24.05ms status_code=200
+INFO:server:rid=48BDBE start request path=/client/comments
+INFO:server:rid=48BDBE completed_in=11.57ms status_code=200
