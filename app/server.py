@@ -132,14 +132,12 @@ async def get_feed(current_user: User = Depends(auth.get_current_active_user)):
 
 @app.get("/client/likes", status_code=status.HTTP_200_OK, response_model=List[LikeOut])
 async def get_post_likes(post_id: UUID, current_user: User = Depends(auth.get_current_active_user)):
-    # TODO
-    pass
+    return await methods.get_post_likes(post_id)
 
 
 @app.get("/client/comments", status_code=status.HTTP_200_OK, response_model=List[CommentOut])
 async def get_comments(post_id: UUID, current_user: User = Depends(auth.get_current_active_user)):
-    # TODO
-    pass
+    return await methods.get_post_comments(post_id)
 
 
 @app.post("/client/post", status_code=status.HTTP_201_CREATED)
@@ -155,6 +153,8 @@ async def create_post(
         'post': post
     }
     # return await methods.create_post(post)
+
+
 #
 # @app.post("/client/post", status_code=status.HTTP_201_CREATED)
 # async def create_post(

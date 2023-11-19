@@ -1001,3 +1001,572 @@ INFO:server:rid=Y71A4J start request path=/client/likes
 INFO:server:rid=Y71A4J completed_in=24.05ms status_code=200
 INFO:server:rid=48BDBE start request path=/client/comments
 INFO:server:rid=48BDBE completed_in=11.57ms status_code=200
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=QERJQE start request path=/
+INFO:server:rid=QERJQE completed_in=0.73ms status_code=404
+INFO:server:rid=E5MUYQ start request path=/favicon.ico
+INFO:server:rid=E5MUYQ completed_in=0.83ms status_code=404
+INFO:server:rid=LTXF3S start request path=/docs
+INFO:server:rid=LTXF3S completed_in=0.82ms status_code=200
+INFO:server:rid=GIJ6MR start request path=/openapi.json
+INFO:server:rid=GIJ6MR completed_in=20.93ms status_code=200
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=JF2X3S start request path=/util
+INFO:server:rid=JF2X3S completed_in=1.69ms status_code=200
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=ORVFEV start request path=/util
+INFO:server:rid=ORVFEV completed_in=11.56ms status_code=200
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=F5MLRK start request path=/util
+INFO:server:rid=F5MLRK completed_in=3.49ms status_code=200
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=IDZGSI start request path=/docs
+INFO:server:rid=IDZGSI completed_in=0.68ms status_code=200
+INFO:server:rid=E72XLD start request path=/openapi.json
+INFO:server:rid=E72XLD completed_in=18.35ms status_code=200
+INFO:server:rid=IP911F start request path=/token
+INFO:server:rid=IP911F completed_in=278.07ms status_code=200
+INFO:server:rid=8BQ7X8 start request path=/client/post
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=LEJLGT start request path=/client/post
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=DUN7LM start request path=/client/post
+INFO:server:rid=DUN7LM completed_in=18.33ms status_code=201
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=Y3M718 start request path=/docs
+INFO:server:rid=Y3M718 completed_in=0.81ms status_code=200
+INFO:server:rid=MDL8AM start request path=/openapi.json
+INFO:server:rid=MDL8AM completed_in=19.94ms status_code=200
+INFO:server:rid=L5E6LB start request path=/token
+INFO:server:rid=L5E6LB completed_in=284.03ms status_code=200
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=E6D5JP start request path=/docs
+INFO:server:rid=E6D5JP completed_in=0.17ms status_code=200
+INFO:server:rid=K4847K start request path=/openapi.json
+INFO:server:rid=K4847K completed_in=12.44ms status_code=200
+INFO:server:rid=8EEC7X start request path=/token
+INFO:server:rid=8EEC7X completed_in=282.43ms status_code=200
+INFO:server:rid=36AZ0P start request path=/client/avatar
+INFO:server:rid=36AZ0P completed_in=9.48ms status_code=201
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=10Y9N7 start request path=/docs
+INFO:server:rid=10Y9N7 completed_in=0.87ms status_code=200
+INFO:server:rid=UX7JMZ start request path=/openapi.json
+INFO:server:rid=UX7JMZ completed_in=7.52ms status_code=200
+INFO:server:rid=U04YT4 start request path=/client/avatar
+INFO:server:rid=U04YT4 completed_in=10.30ms status_code=401
+INFO:server:rid=X37CUN start request path=/token
+INFO:server:rid=X37CUN completed_in=292.76ms status_code=200
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=4218ET start request path=/docs
+INFO:server:rid=4218ET completed_in=0.59ms status_code=200
+INFO:server:rid=9O8LGU start request path=/openapi.json
+INFO:server:rid=9O8LGU completed_in=23.67ms status_code=200
+INFO:server:rid=0434CM start request path=/token
+INFO:server:rid=0434CM completed_in=264.54ms status_code=200
+INFO:server:rid=PV25V0 start request path=/client/avatar
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=084U7D start request path=/client/avatar
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=VD53YW start request path=/client/avatar
+INFO:server:rid=VD53YW completed_in=31.42ms status_code=201
+INFO:server:rid=IBO2C5 start request path=/client/avatar
+INFO:server:rid=IBO2C5 completed_in=20.76ms status_code=201
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=MGX4OQ start request path=/openapi.json
+INFO:server:rid=MGX4OQ completed_in=18.16ms status_code=200
+INFO:server:rid=SEA5H3 start request path=/media
+INFO:server:rid=SEA5H3 completed_in=0.81ms status_code=307
+INFO:server:rid=QEA8HP start request path=/media/
+INFO:server:rid=QEA8HP completed_in=3.44ms status_code=404
+INFO:server:rid=BDNHTR start request path=/favicon.ico
+INFO:server:rid=BDNHTR completed_in=0.63ms status_code=404
+INFO:server:rid=XEA5SM start request path=/client/avatar
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=2SF84Z start request path=/client/avatar
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=XS5T4M start request path=/client/avatar
+INFO:server:rid=XS5T4M completed_in=21.33ms status_code=201
+INFO:server:rid=VFMQJT start request path=/media/
+INFO:server:rid=VFMQJT completed_in=2.12ms status_code=404
+INFO:server:rid=E5J4Q6 start request path=/media/b37e478b-7918-43b5-a87e-72675d7c8aaa.jpg
+INFO:server:rid=E5J4Q6 completed_in=1.68ms status_code=200
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=H03U08 start request path=/docs
+INFO:server:rid=H03U08 completed_in=1.12ms status_code=200
+INFO:server:rid=SDSRZ4 start request path=/openapi.json
+INFO:server:rid=SDSRZ4 completed_in=20.49ms status_code=200
+INFO:server:rid=1C4OOD start request path=/client/avatar
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=FX4FKJ start request path=/client/avatar
+INFO:server:rid=FX4FKJ completed_in=9.16ms status_code=201
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=QNNH5L start request path=/client/avatar
+INFO:server:rid=QNNH5L completed_in=12.89ms status_code=201
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=8H1W3U start request path=/docs
+INFO:server:rid=8H1W3U completed_in=1.32ms status_code=200
+INFO:server:rid=TOTIHX start request path=/openapi.json
+INFO:server:rid=TOTIHX completed_in=20.86ms status_code=200
+INFO:server:rid=W0JE4R start request path=/token
+INFO:server:rid=W0JE4R completed_in=283.51ms status_code=200
+INFO:server:rid=AO1OWH start request path=/client/avatar
+INFO:server:rid=AO1OWH completed_in=26.71ms status_code=201
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=R7BGBB start request path=/media/lleeceo0;png
+INFO:server:rid=1I36QB start request path=/media/lleeceo0.png
+INFO:server:rid=GAKVK4 start request path=/media/lleece0.png
+INFO:server:rid=R7BGBB completed_in=0.81ms status_code=404
+INFO:server:rid=1I36QB completed_in=0.82ms status_code=404
+INFO:server:rid=GAKVK4 completed_in=0.80ms status_code=404
+INFO:server:rid=RWXB5M start request path=/media/lleece0.png
+INFO:server:rid=RWXB5M completed_in=0.97ms status_code=404
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=E3944A start request path=/docs
+INFO:server:rid=E3944A completed_in=1.04ms status_code=200
+INFO:server:rid=MKYWBQ start request path=/openapi.json
+INFO:server:rid=MKYWBQ completed_in=20.93ms status_code=200
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=S6FK4E start request path=/docs
+INFO:server:rid=S6FK4E completed_in=0.85ms status_code=200
+INFO:server:rid=75ZSOU start request path=/openapi.json
+INFO:server:rid=75ZSOU completed_in=23.76ms status_code=200
+INFO:server:rid=1EL1AZ start request path=/client/post
+INFO:server:rid=1EL1AZ completed_in=2.14ms status_code=401
+INFO:server:rid=6GCF3P start request path=/token
+INFO:server:rid=6GCF3P completed_in=286.10ms status_code=200
+INFO:server:rid=JIZ0QL start request path=/client/post
+INFO:server:rid=JIZ0QL completed_in=9.27ms status_code=422
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=VV1WRR start request path=/docs
+INFO:server:rid=VV1WRR completed_in=0.69ms status_code=200
+INFO:server:rid=AFUO6C start request path=/openapi.json
+INFO:server:rid=AFUO6C completed_in=20.22ms status_code=200
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=BQHK4S start request path=/docs
+INFO:server:rid=BQHK4S completed_in=0.91ms status_code=200
+INFO:server:rid=92S0LR start request path=/openapi.json
+INFO:server:rid=92S0LR completed_in=24.28ms status_code=200
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=TJUA2J start request path=/docs
+INFO:server:rid=TJUA2J completed_in=0.60ms status_code=200
+INFO:server:rid=LOHZ5W start request path=/openapi.json
+INFO:server:rid=LOHZ5W completed_in=20.02ms status_code=200
+INFO:server:rid=MYSVHX start request path=/client/post
+INFO:server:rid=MYSVHX completed_in=1.15ms status_code=401
+INFO:server:rid=31G746 start request path=/token
+INFO:server:rid=31G746 completed_in=287.68ms status_code=200
+INFO:server:rid=Y3DJFT start request path=/client/post
+INFO:server:rid=Y3DJFT completed_in=6.86ms status_code=422
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=BS12C6 start request path=/docs
+INFO:server:rid=BS12C6 completed_in=0.64ms status_code=200
+INFO:server:rid=WIPDNJ start request path=/openapi.json
+INFO:server:rid=WIPDNJ completed_in=20.13ms status_code=200
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=QGKULS start request path=/docs
+INFO:server:rid=PQO97B start request path=/docs
+INFO:server:rid=LFHR7P start request path=/docs
+INFO:server:rid=MWP272 start request path=/docs
+INFO:server:rid=V7087G start request path=/docs
+INFO:server:rid=S5JIVC start request path=/docs
+INFO:server:rid=QGKULS completed_in=1.60ms status_code=200
+INFO:server:rid=PQO97B completed_in=1.61ms status_code=200
+INFO:server:rid=LFHR7P completed_in=1.53ms status_code=200
+INFO:server:rid=MWP272 completed_in=1.53ms status_code=200
+INFO:server:rid=V7087G completed_in=1.51ms status_code=200
+INFO:server:rid=S5JIVC completed_in=1.49ms status_code=200
+INFO:server:rid=5STYV3 start request path=/openapi.json
+INFO:server:rid=5STYV3 completed_in=21.47ms status_code=200
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=4FJWEL start request path=/docs
+INFO:server:rid=4FJWEL completed_in=0.30ms status_code=200
+INFO:server:rid=CW1J3M start request path=/openapi.json
+INFO:server:rid=CW1J3M completed_in=24.51ms status_code=200
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=CC7VJX start request path=/docs
+INFO:server:rid=CC7VJX completed_in=0.78ms status_code=200
+INFO:server:rid=JE27SY start request path=/openapi.json
+INFO:server:rid=JE27SY completed_in=8.25ms status_code=200
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=RGUD9G start request path=/docs
+INFO:server:rid=RGUD9G completed_in=0.81ms status_code=200
+INFO:server:rid=MUMB4F start request path=/openapi.json
+INFO:server:rid=MUMB4F completed_in=21.41ms status_code=200
+INFO:server:rid=478X9V start request path=/client/post
+INFO:server:rid=478X9V completed_in=17.71ms status_code=401
+INFO:server:rid=3T23YQ start request path=/token
+INFO:server:rid=3T23YQ completed_in=283.56ms status_code=200
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=MM2I16 start request path=/docs
+INFO:server:rid=MM2I16 completed_in=0.69ms status_code=200
+INFO:server:rid=Y292MT start request path=/openapi.json
+INFO:server:rid=Y292MT completed_in=22.31ms status_code=200
+INFO:server:rid=4V75EL start request path=/client/post
+INFO:server:rid=4V75EL completed_in=2006.49ms status_code=401
+INFO:server:rid=T31E44 start request path=/token
+INFO:server:rid=T31E44 completed_in=277.61ms status_code=200
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=ZOG25D start request path=/docs
+INFO:server:rid=ZOG25D completed_in=1.16ms status_code=200
+INFO:server:rid=7Q0JXV start request path=/openapi.json
+INFO:server:rid=7Q0JXV completed_in=20.01ms status_code=200
+INFO:server:rid=HETC5R start request path=/token
+INFO:server:rid=HETC5R completed_in=283.51ms status_code=200
+INFO:server:rid=QQUAQJ start request path=/client/post
+INFO:server:rid=QQUAQJ completed_in=2015.57ms status_code=422
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=3VC9LB start request path=/docs
+INFO:server:rid=3VC9LB completed_in=0.86ms status_code=200
+INFO:server:rid=QVXWVK start request path=/openapi.json
+INFO:server:rid=QVXWVK completed_in=24.89ms status_code=200
+INFO:server:rid=V6Y01O start request path=/token
+INFO:server:rid=V6Y01O completed_in=283.47ms status_code=200
+INFO:server:rid=FX2YXY start request path=/client/post
+INFO:server:rid=FX2YXY completed_in=10.48ms status_code=422
+INFO:server:rid=KDCR8Z start request path=/client/post
+INFO:server:rid=KDCR8Z completed_in=8.08ms status_code=422
+INFO:server:rid=VBVWHH start request path=/client/post
+INFO:server:rid=VBVWHH completed_in=9.62ms status_code=422
+INFO:server:rid=ZGKJHM start request path=/docs
+INFO:server:rid=ZGKJHM completed_in=0.60ms status_code=200
+INFO:server:rid=ROBKY9 start request path=/openapi.json
+INFO:server:rid=ROBKY9 completed_in=1.04ms status_code=200
+INFO:server:rid=IMZUBO start request path=/client/post
+INFO:server:rid=IMZUBO completed_in=1.57ms status_code=401
+INFO:server:rid=XBQW35 start request path=/token
+INFO:server:rid=XBQW35 completed_in=261.95ms status_code=200
+INFO:server:rid=J0EWAL start request path=/client/post
+INFO:server:rid=J0EWAL completed_in=8.24ms status_code=422
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=V0M93F start request path=/docs
+INFO:server:rid=V0M93F completed_in=0.70ms status_code=200
+INFO:server:rid=0MFAKT start request path=/openapi.json
+INFO:server:rid=0MFAKT completed_in=25.26ms status_code=200
+INFO:server:rid=PVLE4S start request path=/client/post
+INFO:server:rid=PVLE4S completed_in=12.80ms status_code=401
+INFO:server:rid=2GYEHN start request path=/token
+INFO:server:rid=2GYEHN completed_in=284.75ms status_code=200
+INFO:server:rid=ERV69U start request path=/client/post
+INFO:server:rid=ERV69U completed_in=19.51ms status_code=422
+INFO:server:rid=ZRKMYB start request path=/client/avatar
+INFO:server:rid=ZRKMYB completed_in=29.59ms status_code=201
+INFO:server:rid=U9E55A start request path=/client/post
+INFO:server:rid=U9E55A completed_in=21.91ms status_code=422
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=4LBSCQ start request path=/docs
+INFO:server:rid=4LBSCQ completed_in=1.06ms status_code=200
+INFO:server:rid=XTXPJ6 start request path=/openapi.json
+INFO:server:rid=XTXPJ6 completed_in=20.49ms status_code=200
+INFO:server:rid=3WSTJ5 start request path=/token
+INFO:server:rid=3WSTJ5 completed_in=257.41ms status_code=200
+INFO:server:rid=VRBXM3 start request path=/client/post
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=NQAE24 start request path=/client/post
+INFO:server:rid=NQAE24 completed_in=8.62ms status_code=201
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=6DWV5A start request path=/docs
+INFO:server:rid=6DWV5A completed_in=0.84ms status_code=200
+INFO:server:rid=QBW8I1 start request path=/openapi.json
+INFO:server:rid=QBW8I1 completed_in=21.68ms status_code=200
+INFO:server:rid=6JME1X start request path=/token
+INFO:server:rid=6JME1X completed_in=282.80ms status_code=200
+INFO:server:rid=IRH2ZA start request path=/client/post
+INFO:server:rid=IRH2ZA completed_in=25.65ms status_code=422
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=UR4FFU start request path=/docs
+INFO:server:rid=UR4FFU completed_in=0.78ms status_code=200
+INFO:server:rid=DFSR4Q start request path=/openapi.json
+INFO:server:rid=DFSR4Q completed_in=22.80ms status_code=200
+INFO:server:rid=4N09SA start request path=/token
+INFO:server:rid=4N09SA completed_in=274.13ms status_code=200
+INFO:server:rid=ZXJT9S start request path=/client/post
+INFO:server:rid=ZXJT9S completed_in=8.73ms status_code=422
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=1LEPOW start request path=/docs
+INFO:server:rid=1LEPOW completed_in=0.69ms status_code=200
+INFO:server:rid=6V8TUW start request path=/openapi.json
+INFO:server:rid=6V8TUW completed_in=20.68ms status_code=200
+INFO:server:rid=EVOVSL start request path=/token
+INFO:server:rid=EVOVSL completed_in=287.27ms status_code=200
+INFO:server:rid=6IQ3TT start request path=/client/post
+INFO:server:rid=6IQ3TT completed_in=18.64ms status_code=422
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=SPP42Q start request path=/client/post
+INFO:server:rid=SPP42Q completed_in=17.88ms status_code=422
+INFO:server:rid=1UIE67 start request path=/client/post
+INFO:server:rid=1UIE67 completed_in=15.25ms status_code=422
+INFO:server:rid=TB1ELY start request path=/docs
+INFO:server:rid=TB1ELY completed_in=0.75ms status_code=200
+INFO:server:rid=VVS598 start request path=/openapi.json
+INFO:server:rid=VVS598 completed_in=17.39ms status_code=200
+INFO:server:rid=OO9KG6 start request path=/client/post
+INFO:server:rid=OO9KG6 completed_in=16.01ms status_code=401
+INFO:server:rid=0RU21T start request path=/token
+INFO:server:rid=0RU21T completed_in=280.85ms status_code=200
+INFO:server:rid=WZU7Z9 start request path=/client/post
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=RFSYSH start request path=/docs
+INFO:server:rid=RFSYSH completed_in=1.01ms status_code=200
+INFO:server:rid=X67SZR start request path=/openapi.json
+INFO:server:rid=X67SZR completed_in=22.36ms status_code=200
+INFO:server:rid=T2W4CN start request path=/token
+INFO:server:rid=T2W4CN completed_in=285.44ms status_code=200
+INFO:server:rid=WORE6A start request path=/client/post
+INFO:server:rid=WORE6A completed_in=12.59ms status_code=422
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=IDV9W9 start request path=/docs
+INFO:server:rid=IDV9W9 completed_in=1.06ms status_code=200
+INFO:server:rid=O9PZ29 start request path=/openapi.json
+INFO:server:rid=O9PZ29 completed_in=20.52ms status_code=200
+INFO:server:rid=I6XAJK start request path=/client/post
+INFO:server:rid=I6XAJK completed_in=9.91ms status_code=422
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=MPJYW7 start request path=/docs
+INFO:server:rid=MPJYW7 completed_in=0.99ms status_code=200
+INFO:server:rid=UMN8Q4 start request path=/openapi.json
+INFO:server:rid=UMN8Q4 completed_in=20.87ms status_code=200
+INFO:server:rid=OHTWQF start request path=/client/post
+INFO:server:rid=OHTWQF completed_in=11.52ms status_code=422
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=RP7FSY start request path=/docs
+INFO:server:rid=RP7FSY completed_in=0.68ms status_code=200
+INFO:server:rid=LLHKCQ start request path=/openapi.json
+INFO:server:rid=LLHKCQ completed_in=19.91ms status_code=200
+INFO:server:rid=I75IIZ start request path=/client/post
+INFO:server:rid=I75IIZ completed_in=5.55ms status_code=401
+INFO:server:rid=8EUP5G start request path=/token
+INFO:server:rid=8EUP5G completed_in=255.57ms status_code=200
+INFO:server:rid=O6ERQN start request path=/client/post
+INFO:server:rid=O6ERQN completed_in=11.62ms status_code=422
+INFO:server:rid=XZG5MV start request path=/docs
+INFO:server:rid=XZG5MV completed_in=1.07ms status_code=200
+INFO:server:rid=P4QVJW start request path=/openapi.json
+INFO:server:rid=P4QVJW completed_in=0.92ms status_code=200
+INFO:server:rid=WHXKDU start request path=/token
+INFO:server:rid=WHXKDU completed_in=258.84ms status_code=200
+INFO:server:rid=ATBQ2Y start request path=/client/post
+INFO:server:rid=ATBQ2Y completed_in=11.18ms status_code=422
+INFO:server:rid=ETJZ9B start request path=/client/post
+INFO:server:rid=ETJZ9B completed_in=12.84ms status_code=422
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=CLMW40 start request path=/docs
+INFO:server:rid=CLMW40 completed_in=0.81ms status_code=200
+INFO:server:rid=GBIN0F start request path=/openapi.json
+INFO:server:rid=GBIN0F completed_in=19.16ms status_code=200
+INFO:server:rid=UA3W24 start request path=/client/post
+INFO:server:rid=UA3W24 completed_in=4.03ms status_code=401
+INFO:server:rid=V3XL8E start request path=/token
+INFO:server:rid=V3XL8E completed_in=283.12ms status_code=200
+INFO:server:rid=CTQL8X start request path=/client/post
+INFO:server:rid=CTQL8X completed_in=8.84ms status_code=422
+INFO:server:rid=J9OR46 start request path=/client/post
+INFO:server:rid=J9OR46 completed_in=13.69ms status_code=422
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=1851W7 start request path=/client/post
+INFO:server:rid=1851W7 completed_in=12.96ms status_code=422
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=W4V4OI start request path=/docs
+INFO:server:rid=W4V4OI completed_in=0.89ms status_code=200
+INFO:server:rid=SOET8F start request path=/openapi.json
+INFO:server:rid=SOET8F completed_in=20.45ms status_code=200
+INFO:server:rid=WUU3VG start request path=/client/post
+INFO:server:rid=WUU3VG completed_in=20.76ms status_code=401
+INFO:server:rid=O73LZM start request path=/token
+INFO:server:rid=O73LZM completed_in=277.66ms status_code=200
+INFO:server:rid=RLHBS9 start request path=/client/post
+INFO:server:rid=RLHBS9 completed_in=10.66ms status_code=422
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=UCQ49A start request path=/docs
+INFO:server:rid=UCQ49A completed_in=0.78ms status_code=200
+INFO:server:rid=04HVUV start request path=/openapi.json
+INFO:server:rid=04HVUV completed_in=25.12ms status_code=200
+INFO:server:rid=SF9730 start request path=/token
+INFO:server:rid=SF9730 completed_in=286.51ms status_code=200
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=Z7F6GE start request path=/client/post
+INFO:server:rid=Z7F6GE completed_in=10.29ms status_code=422
+INFO:server:rid=Q9U9L5 start request path=/client/post
+INFO:server:rid=Q9U9L5 completed_in=10.69ms status_code=422
+INFO:server:rid=PWRYOU start request path=/client/post
+INFO:server:rid=PWRYOU completed_in=29.42ms status_code=422
+INFO:server:rid=BRPI2K start request path=/client/post
+INFO:server:rid=BRPI2K completed_in=4.74ms status_code=422
+INFO:server:rid=32GEYI start request path=/client/post
+INFO:server:rid=32GEYI completed_in=4.20ms status_code=422
+INFO:server:rid=DQRVNB start request path=/client/post
+INFO:server:rid=DQRVNB completed_in=4.88ms status_code=201
+INFO:server:rid=LDO3NM start request path=/client/post
+INFO:server:rid=LDO3NM completed_in=23.75ms status_code=422
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=LCLY9W start request path=/client/post
+INFO:server:rid=LCLY9W completed_in=28.85ms status_code=201
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=EZ330S start request path=/docs
+INFO:server:rid=EZ330S completed_in=0.87ms status_code=200
+INFO:server:rid=EZCC05 start request path=/openapi.json
+INFO:server:rid=EZCC05 completed_in=19.75ms status_code=200
+INFO:server:rid=QDRW8H start request path=/client/post
+INFO:server:rid=QDRW8H completed_in=14.84ms status_code=401
+INFO:server:rid=4R5QO3 start request path=/token
+INFO:server:rid=4R5QO3 completed_in=270.41ms status_code=200
+INFO:server:rid=5UELWW start request path=/client/post
+INFO:server:rid=5UELWW completed_in=28.00ms status_code=201
+INFO:server:rid=3IEABR start request path=/client/post
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=JWDJ46 start request path=/docs
+INFO:server:rid=JWDJ46 completed_in=0.97ms status_code=200
+INFO:server:rid=V4E8VX start request path=/openapi.json
+INFO:server:rid=V4E8VX completed_in=18.29ms status_code=200
+INFO:server:rid=JU1JT3 start request path=/token
+INFO:server:rid=JU1JT3 completed_in=285.12ms status_code=200
+INFO:server:rid=1FCQ04 start request path=/client/post
+INFO:server:rid=1FCQ04 completed_in=12.26ms status_code=201
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=MJLS5B start request path=/docs
+INFO:server:rid=MJLS5B completed_in=0.82ms status_code=200
+INFO:server:rid=ZF335T start request path=/openapi.json
+INFO:server:rid=ZF335T completed_in=22.38ms status_code=200
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:server:rid=X9QNYZ start request path=/docs
+INFO:server:rid=UHFLCB start request path=/docs
+INFO:server:rid=X9QNYZ completed_in=0.54ms status_code=200
+INFO:server:rid=UHFLCB completed_in=0.52ms status_code=200
+INFO:server:rid=Y2DRDO start request path=/openapi.json
+INFO:server:rid=Y2DRDO completed_in=19.09ms status_code=200
+INFO:server:rid=2IMQL9 start request path=/docs
+INFO:server:rid=2IMQL9 completed_in=0.66ms status_code=200
+INFO:server:rid=7574JD start request path=/openapi.json
+INFO:server:rid=7574JD completed_in=1.23ms status_code=200
+INFO:server:rid=NGPWC5 start request path=/client/post
+INFO:server:rid=NGPWC5 completed_in=20.03ms status_code=401
+INFO:server:rid=5BO30D start request path=/token
+INFO:server:rid=5BO30D completed_in=285.18ms status_code=200
+INFO:server:rid=TFYAQA start request path=/client/post
+INFO:server:rid=TFYAQA completed_in=22.07ms status_code=201
+INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
