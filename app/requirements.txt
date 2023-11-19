@@ -12,3 +12,5 @@ python-multipart
 bcrypt
 python-jose
 python-dotenv
+aiofiles
+python-magic

@@ -6,6 +6,7 @@ import urllib.parse
 load_dotenv('.env')
 
 APP_ROOT = "./"
+MEDIA_ROOT = APP_ROOT + "media/"
 
 # database info
 DB_USER = os.getenv('POSTGRES_USER')

@@ -11,17 +11,17 @@ import random
 
 
 async def helper():
-    query = tables.posts.select()
+    query = select(tables.posts.c.post_id)
     posts = await database.fetch_all(query)
 
-    f = open(APP_ROOT + "/mock_data/posts.json")
+    f = open(APP_ROOT + "/mock_data/post_locations.json")
     json_posts = json.load(f)
 
-    for i in range(0, len(posts) - 1):
+    for i in range(0, len(posts)):
         json_posts[i]['post_id'] = str(posts[i]['post_id'])
 
     obj = json.dumps(json_posts, indent=4)
-    with open(APP_ROOT + "/mock_data/posts.json", "w") as outfile:
+    with open(APP_ROOT + "/mock_data/post_locations.json", "w") as outfile:
         outfile.write(obj)
 
 
@@ -205,5 +205,15 @@ async def populate_mock_data():
         f = open(APP_ROOT + "/mock_data/likes.json")
         data = json.load(f)
         query = insert(tables.likes)
+        async with database.transaction():
+            await database.execute_many(query, data)
+
+    query = select([func.count()]).select_from(tables.post_locations)
+    count = await database.execute(query)
+    if count == 0:
+        print('no locations in database. uploading mock user data...')
+        f = open(APP_ROOT + "/mock_data/post_locations.json")
+        data = json.load(f)
+        query = insert(tables.post_locations)
         async with database.transaction():
             await database.execute_many(query, data)

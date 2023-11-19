@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from typing import Optional, Any, List, Dict
+from pydantic.types import Base64Str
 import enum
 import datetime
 from uuid import UUID
@@ -46,6 +47,21 @@ class PostOut(BaseModel):
     likes: int
 
 
+class Location(BaseModel):
+    latitude: float
+    longitude: float
+
+
+class PostIn(BaseModel):
+    content: str
+    location: Location
+
+# class PostIn(BaseModel):
+#     content: str
+#     image: Optional[Base64Str]
+#     location: Location
+
+
 class UserOut(BaseModel):
     username: str
     full_name: str
@@ -75,15 +91,6 @@ class FollowerOut(BaseModel):
 class LikeOut(BaseModel):
     username: str
 
-
-class Location(BaseModel):
-    lat: float
-    lon: float
-
-
-class PostIn(BaseModel):
-    content: str
-    location: Location
 
 
 class CommentIn(BaseModel):

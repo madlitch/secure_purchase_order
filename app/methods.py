@@ -1,12 +1,19 @@
+from uuid import uuid4
+
 from database import database
+from fastapi import UploadFile
 from models import *
 from sqlalchemy.sql import select, and_, insert
 from sqlalchemy import func
 from exceptions import *
+from constants import MEDIA_ROOT
 
 import auth
 import tables
 import constants
+import mimetypes
+import aiofiles
+import base64
 
 
 async def create_user(user: UserIn):
@@ -91,9 +98,8 @@ async def get_user_profile(username: str):
     ).order_by(
         tables.posts.c.date_posted.desc()
     )
-    posts_query = select(tables.posts).where(tables.posts.c.username == username)
-    posts = await database.fetch_all(query)
 
+    posts = await database.fetch_all(query)
     return {**profile, 'posts': posts}
 
 
@@ -117,8 +123,15 @@ async def get_follower_count(user: User):
 
 async def get_following_count(user: User):
     query = select([func.count()]).select_from(tables.following).where(tables.following.c.user == user.username)
-    following = await database.fetch_all(query)
+    following = await database.execute(query)
     return following
+
+
+async def update_avatar(file: UploadFile, user: User):
+    extension = mimetypes.guess_extension(file.content_type)
+    async with aiofiles.open(MEDIA_ROOT + user.username + str(extension), "wb") as out_file:
+        content = await file.read()
+        await out_file.write(content)
 
 
 async def get_feed(user: User):
@@ -172,3 +185,43 @@ async def get_post_comments(post_id: UUID):
     )
     comments = await database.fetch_all(query)
     return comments
+
+
+async def create_post(post: PostIn, user: User):
+    if post.image:
+        image_bytes = base64.b64decode(post.image_data)
+        extension = mimetypes.guess_extension(post.image)
+
+        async with aiofiles.open(MEDIA_ROOT + "test" + str(extension), "wb") as out_file:
+            await out_file.write(image_bytes)
+
+    # TODO
+
+    #
+    #
+    # async with (database.transaction()):
+    #     try:
+    #         post_query = insert(tables.posts).values(username="lleece0", content=post.content)
+    #         post_id = await database.execute(post_query)
+    #
+    #         location_query = insert(
+    #             tables.post_locations
+    #         ).values(post_id=post_id,
+    #                  latitude=post.location.latitude,
+    #                  longitude=post.location.longitude)
+    #         await database.execute(location_query)
+    #
+    #
+    #     except Exception as e:
+    #         pass
+    #         # await database.rollback()
+
+
+async def create_comment(comment: CommentIn, user: User):
+    # TODO
+    pass
+
+
+async def create_like(post_id: UUID, user: User):
+    # TODO
+    pass

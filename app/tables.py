@@ -30,6 +30,13 @@ posts = (
           Column('date_posted', DateTime, server_default=func.now())
           ))
 
+post_locations = (
+    Table('post_locations', metadata,
+          Column('post_id', UUID, ForeignKey('posts.post_id'), primary_key=True),
+          Column('latitude', Float),
+          Column('longitude', Float),
+          ))
+
 post_images = (
     Table('post_images', metadata,
           Column('post_id', UUID, ForeignKey('posts.post_id'), primary_key=True),
@@ -38,10 +45,10 @@ post_images = (
           ))
 
 likes = (
-      Table('likes', metadata,
-            Column('post_id', UUID, ForeignKey('posts.post_id'), primary_key=True),
-            Column('username', ForeignKey('users.username'), primary_key=True),
-            ))
+    Table('likes', metadata,
+          Column('post_id', UUID, ForeignKey('posts.post_id'), primary_key=True),
+          Column('username', ForeignKey('users.username'), primary_key=True),
+          ))
 
 comments = (
     Table('comments', metadata,

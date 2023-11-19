@@ -1,11 +1,17 @@
-from fastapi import FastAPI, Depends, status, Request
+from typing import Annotated, Union
+
+from fastapi import FastAPI, Depends, status, Request, File, UploadFile, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+
+from pydantic import parse_obj_as
+
 from models import *
 from database import *
 from constants import *
-from uuid import UUID
+from uuid import UUID, uuid5, uuid4
 
 import methods
 import exceptions
@@ -15,19 +21,10 @@ import logging
 import random
 import string
 import helper
-import tables
 
 app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="{}static".format(APP_ROOT)), name="static")
-app.mount("/media", StaticFiles(directory="{}media".format(APP_ROOT)), name="media")
-
-# CORS Middleware (for production POST/GET methods)
-
-origins = [
-    "http://localhost:3000",
-    "localhost:3000"
-]
 
 logging.basicConfig(filename='info.log', level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -115,9 +112,15 @@ async def create_bio(current_user: User = Depends(auth.get_current_active_user))
 
 
 @app.post("/client/avatar", status_code=status.HTTP_201_CREATED)
-async def update_avatar(current_user: User = Depends(auth.get_current_active_user)):
-    # TODO
-    pass
+async def update_avatar(file: UploadFile, current_user: User = Depends(auth.get_current_active_user)):
+    await methods.update_avatar(file, current_user)
+
+
+@app.get("/client/avatar", status_code=status.HTTP_201_CREATED, response_class=FileResponse)
+async def get_avatar(username: str, current_user: User = Depends(auth.get_current_active_user)):
+    # TODO routing logic will need to be modified here
+    # TODO multiple server routing will be done via the server for media
+    return MEDIA_ROOT + username
 
 
 # Post, Comments, & Likes --
@@ -129,27 +132,43 @@ async def get_feed(current_user: User = Depends(auth.get_current_active_user)):
 
 @app.get("/client/likes", status_code=status.HTTP_200_OK, response_model=List[LikeOut])
 async def get_post_likes(post_id: UUID, current_user: User = Depends(auth.get_current_active_user)):
-    return await methods.get_post_likes(post_id)
+    # TODO
+    pass
 
 
 @app.get("/client/comments", status_code=status.HTTP_200_OK, response_model=List[CommentOut])
 async def get_comments(post_id: UUID, current_user: User = Depends(auth.get_current_active_user)):
-    return await methods.get_post_comments(post_id)
+    # TODO
+    pass
 
 
 @app.post("/client/post", status_code=status.HTTP_201_CREATED)
-async def create_post(post: CommentIn, current_user: User = Depends(auth.get_current_active_user)):
-    # TODO
-    pass
+async def create_post(
+        post: str,
+        latitude: float,
+        longitude: float,
+        files: UploadFile = None,
+        current_user: User = Depends(auth.get_current_active_user)
+):
+    return {
+        'file': files.filename,
+        'post': post
+    }
+    # return await methods.create_post(post)
+#
+# @app.post("/client/post", status_code=status.HTTP_201_CREATED)
+# async def create_post(
+#         post: PostIn,
+#         current_user: User = Depends(auth.get_current_active_user)
+# ):
+#     return await methods.create_post(post, current_user)
 
 
 @app.post("/client/comment", status_code=status.HTTP_201_CREATED)
 async def create_comment(comment: CommentIn, current_user: User = Depends(auth.get_current_active_user)):
-    # TODO
-    pass
+    return await methods.create_comment(comment, current_user)
 
 
 @app.post("/client/like", status_code=status.HTTP_201_CREATED)
-async def like_post(post_id: UUID, current_user: User = Depends(auth.get_current_active_user)):
-    # TODO
-    pass
+async def create_like(post_id: UUID, current_user: User = Depends(auth.get_current_active_user)):
+    return await methods.create_like(post_id, current_user)
