@@ -218,10 +218,24 @@ async def create_post(post: PostIn, user: User):
 
 
 async def create_comment(comment: CommentIn, user: User):
-    # TODO
-    pass
-
+    try:
+        comment_query = insert(tables.comments).values(
+            post_id=comment.post_id,
+            username=user.username,
+            content=comment.content
+        )
+        await database.execute(comment_query)
+    except Exception as e:
+        
+        raise APIException(detail="Failed to create a comment") from e
 
 async def create_like(post_id: UUID, user: User):
-    # TODO
-    pass
+    try:
+        like_query = insert(tables.likes).values(
+            post_id=post_id,
+            username=user.username
+        )
+        await database.execute(like_query)
+    except Exception as e:
+        
+        raise APIException(detail="Failed to create a like") from e

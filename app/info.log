@@ -1570,3 +1570,7 @@ INFO:server:rid=5BO30D completed_in=285.18ms status_code=200
 INFO:server:rid=TFYAQA start request path=/client/post
 INFO:server:rid=TFYAQA completed_in=22.07ms status_code=201
 INFO:databases:Disconnected from database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
+INFO:databases:Connected to database postgresql://root:********@db:5432/stringshare
