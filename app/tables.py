@@ -41,7 +41,6 @@ post_images = (
     Table('post_images', metadata,
           Column('post_id', UUID, ForeignKey('posts.post_id'), primary_key=True),
           Column('image_url', String(500), primary_key=True),
-          Column('caption', String(100)),
           ))
 
 likes = (

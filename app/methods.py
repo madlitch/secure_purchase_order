@@ -1,9 +1,10 @@
+import os.path
 from uuid import uuid4
 
 from database import database
 from fastapi import UploadFile
 from models import *
-from sqlalchemy.sql import select, and_, insert
+from sqlalchemy.sql import select, and_, insert, update
 from sqlalchemy import func
 from exceptions import *
 from constants import MEDIA_ROOT
@@ -127,6 +128,13 @@ async def get_following_count(user: User):
     return following
 
 
+async def create_bio(bio, user):
+    query = update(tables.users).where(tables.users.c.username == user.username).values(
+        bio=bio,
+    )
+    await database.execute(query)
+
+
 async def update_avatar(file: UploadFile, user: User):
     extension = mimetypes.guess_extension(file.content_type)
     async with aiofiles.open(MEDIA_ROOT + user.username + str(extension), "wb") as out_file:
@@ -149,13 +157,15 @@ async def get_feed(user: User):
         tables.posts,
         tables.users,
         func.coalesce(comments_subquery.c.comments, 0).label('comments'),
-        func.coalesce(likes_subquery.c.likes, 0).label('likes')
+        func.coalesce(likes_subquery.c.likes, 0).label('likes'),
+        tables.post_images.c.image_url
     ]).select_from(
         tables.following
         .join(tables.posts, tables.following.c.following == tables.posts.c.username)
         .join(tables.users, tables.posts.c.username == tables.users.c.username)
         .outerjoin(comments_subquery, comments_subquery.c.post_id == tables.posts.c.post_id)
         .outerjoin(likes_subquery, likes_subquery.c.post_id == tables.posts.c.post_id)
+        .outerjoin(tables.post_images, tables.post_images.c.post_id == tables.posts.c.post_id)
     ).where(
         tables.following.c.user == user.username
     ).order_by(
@@ -187,55 +197,43 @@ async def get_post_comments(post_id: UUID):
     return comments
 
 
-async def create_post(post: PostIn, user: User):
-    if post.image:
-        image_bytes = base64.b64decode(post.image_data)
-        extension = mimetypes.guess_extension(post.image)
+async def create_post(post: str, latitude: float, longitude: float, photo: UploadFile, user: User):
+    async with (database.transaction()):
+        try:
+            post_query = insert(tables.posts).values(username=user.username, content=post)
+            post_id = await database.execute(post_query)
+            if photo:
+                _, extension = os.path.splitext(photo.filename)
+                thing = str(post_id) + extension
+                async with aiofiles.open(MEDIA_ROOT + str(post_id) + extension, "wb") as out_file:
+                    await out_file.write(photo.file.read())
+                image_query = insert(tables.post_images).values(post_id=post_id, image_url=thing)
+                await database.execute(image_query)
 
-        async with aiofiles.open(MEDIA_ROOT + "test" + str(extension), "wb") as out_file:
-            await out_file.write(image_bytes)
+            location_query = insert(
+                tables.post_locations
+            ).values(post_id=post_id,
+                     latitude=latitude,
+                     longitude=longitude)
+            await database.execute(location_query)
 
-    # TODO
-
-    #
-    #
-    # async with (database.transaction()):
-    #     try:
-    #         post_query = insert(tables.posts).values(username="lleece0", content=post.content)
-    #         post_id = await database.execute(post_query)
-    #
-    #         location_query = insert(
-    #             tables.post_locations
-    #         ).values(post_id=post_id,
-    #                  latitude=post.location.latitude,
-    #                  longitude=post.location.longitude)
-    #         await database.execute(location_query)
-    #
-    #
-    #     except Exception as e:
-    #         pass
-    #         # await database.rollback()
+        except Exception as e:
+            print(e)
+            # await database.rollback()
 
 
 async def create_comment(comment: CommentIn, user: User):
-    try:
-        comment_query = insert(tables.comments).values(
-            post_id=comment.post_id,
-            username=user.username,
-            content=comment.content
-        )
-        await database.execute(comment_query)
-    except Exception as e:
-        
-        raise APIException(detail="Failed to create a comment") from e
+    query = insert(tables.comments).values(
+        post_id=comment.post_id,
+        username=user.username,
+        content=comment.content
+    )
+    await database.execute(query)
+
 
 async def create_like(post_id: UUID, user: User):
-    try:
-        like_query = insert(tables.likes).values(
-            post_id=post_id,
-            username=user.username
-        )
-        await database.execute(like_query)
-    except Exception as e:
-        
-        raise APIException(detail="Failed to create a like") from e
+    query = insert(tables.likes).values(
+        post_id=post_id,
+        username=user.username
+    )
+    await database.execute(query)

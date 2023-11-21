@@ -59,9 +59,6 @@ async def shutdown():
 async def util():
     print("helping!")
     await helper.helper()
-    # await helper.create_followings()
-    # await helper.create_likes()
-    # await helper.populate_mock_data()
 
 
 # Auth --
@@ -106,9 +103,8 @@ async def get_following(current_user: User = Depends(auth.get_current_active_use
 
 
 @app.post("/client/bio", status_code=status.HTTP_201_CREATED)
-async def create_bio(current_user: User = Depends(auth.get_current_active_user)):
-    # TODO
-    pass
+async def create_bio(bio: str, current_user: User = Depends(auth.get_current_active_user)):
+    return await methods.create_bio(bio, current_user)
 
 
 @app.post("/client/avatar", status_code=status.HTTP_201_CREATED)
@@ -145,23 +141,10 @@ async def create_post(
         post: str,
         latitude: float,
         longitude: float,
-        files: UploadFile = None,
+        photo: UploadFile = None,
         current_user: User = Depends(auth.get_current_active_user)
 ):
-    return {
-        'file': files.filename,
-        'post': post
-    }
-    # return await methods.create_post(post)
-
-
-#
-# @app.post("/client/post", status_code=status.HTTP_201_CREATED)
-# async def create_post(
-#         post: PostIn,
-#         current_user: User = Depends(auth.get_current_active_user)
-# ):
-#     return await methods.create_post(post, current_user)
+    await methods.create_post(post, latitude, longitude, photo, current_user)
 
 
 @app.post("/client/comment", status_code=status.HTTP_201_CREATED)
