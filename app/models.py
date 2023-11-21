@@ -66,7 +66,7 @@ class Location(BaseModel):
 class UserOut(BaseModel):
     username: str
     full_name: str
-    bio: str
+    bio: Optional[str]
     avatar_url: Optional[str]
     followers: int
     following: int

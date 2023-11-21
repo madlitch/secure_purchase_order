@@ -18,6 +18,7 @@ import base64
 
 
 async def create_user(user: UserIn):
+    user.username = user.username.lower()
     query = tables.users.select().where(tables.users.c.username == user.username)
     existing_user = await database.execute(query)
     if existing_user:
