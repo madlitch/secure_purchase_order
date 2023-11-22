@@ -1,20 +1,15 @@
-from typing import Annotated, Union
-
 from fastapi import FastAPI, Depends, status, Request, File, UploadFile, Form
-from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 
-from pydantic import parse_obj_as
 
 from models import *
 from database import *
 from constants import *
-from uuid import UUID, uuid5, uuid4
+from uuid import UUID
 
 import methods
-import exceptions
 import auth
 import time
 import logging
@@ -45,7 +40,6 @@ async def log_requests(request: Request, call_next):
 @app.on_event("startup")
 async def startup():
     await database.connect()
-    await helper.populate_mock_data()
 
 
 @app.on_event("shutdown")
@@ -55,10 +49,18 @@ async def shutdown():
 
 # API Routes
 
+# Util --
+
+@app.get("/reset_database")
+async def reset_database():
+    await helper.reset_database()
+
+
 @app.get("/util")
 async def util():
     print("helping!")
-    await helper.helper()
+    # await helper.helper()
+    await helper.reset_database()
 
 
 # Auth --
@@ -86,10 +88,14 @@ async def get_user_profile(username: str, current_user: User = Depends(auth.get_
     return await methods.get_user_profile(username)
 
 
-@app.get("/client/search", status_code=status.HTTP_200_OK)
-async def search_users(username: str, current_user: User = Depends(auth.get_current_active_user)):
-    # TODO
-    pass
+@app.get("/client/search", status_code=status.HTTP_200_OK, response_model=List[User])
+async def search_users(search_query: str, current_user: User = Depends(auth.get_current_active_user)):
+    return await methods.search_users(search_query)
+
+
+@app.post("/client/follow", status_code=status.HTTP_201_CREATED)
+async def follow_user(username: str, current_user: User = Depends(auth.get_current_active_user)):
+    return await methods.follow_user(username, current_user)
 
 
 @app.get("/client/followers", status_code=status.HTTP_200_OK, response_model=List[FollowerOut])
@@ -110,13 +116,6 @@ async def create_bio(bio: str, current_user: User = Depends(auth.get_current_act
 @app.post("/client/avatar", status_code=status.HTTP_201_CREATED)
 async def update_avatar(file: UploadFile, current_user: User = Depends(auth.get_current_active_user)):
     await methods.update_avatar(file, current_user)
-
-
-@app.get("/client/avatar", status_code=status.HTTP_201_CREATED, response_class=FileResponse)
-async def get_avatar(username: str, current_user: User = Depends(auth.get_current_active_user)):
-    # TODO routing logic will need to be modified here
-    # TODO multiple server routing will be done via the server for media
-    return MEDIA_ROOT + username
 
 
 # Post, Comments, & Likes --
@@ -141,10 +140,10 @@ async def create_post(
         post: str,
         latitude: float,
         longitude: float,
-        photo: UploadFile = None,
+        photo: UploadFile,
         current_user: User = Depends(auth.get_current_active_user)
 ):
-    await methods.create_post(post, latitude, longitude, photo, current_user)
+    return await methods.create_post(post, latitude, longitude, photo, current_user)
 
 
 @app.post("/client/comment", status_code=status.HTTP_201_CREATED)
@@ -155,3 +154,8 @@ async def create_comment(comment: CommentIn, current_user: User = Depends(auth.g
 @app.post("/client/like", status_code=status.HTTP_201_CREATED)
 async def create_like(post_id: UUID, current_user: User = Depends(auth.get_current_active_user)):
     return await methods.create_like(post_id, current_user)
+
+
+@app.get("/client/media/", status_code=status.HTTP_200_OK, response_class=FileResponse)
+async def get_photo(url: str):
+    return os.path.join(MEDIA_ROOT, url)

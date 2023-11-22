@@ -1,0 +1,16 @@
+insert into public.followers ("user", follower)
+values  ('kdjakovic4', 'glawfull3'),
+        ('kdjakovic4', 'lleece0'),
+        ('glawfull3', 'lleece0'),
+        ('lleece0', 'cacres2'),
+        ('cacres2', 'lleece0'),
+        ('ifinders1', 'lleece0'),
+        ('cacres2', 'ifinders1'),
+        ('glawfull3', 'ifinders1'),
+        ('glawfull3', 'cacres2'),
+        ('cacres2', 'glawfull3'),
+        ('ifinders1', 'glawfull3'),
+        ('lleece0', 'glawfull3'),
+        ('lleece0', 'ifinders1'),
+        ('ifinders1', 'cacres2'),
+        ('kdjakovic4', 'ifinders1');

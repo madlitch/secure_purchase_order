@@ -44,6 +44,8 @@ class PostOut(BaseModel):
     date_posted: datetime.datetime
     avatar_url: Optional[str]
     image_url: Optional[str]
+    latitude: float
+    longitude: float
     comments: int
     likes: int
 
@@ -51,16 +53,6 @@ class PostOut(BaseModel):
 class Location(BaseModel):
     latitude: float
     longitude: float
-
-
-# class PostIn(BaseModel):
-#     content: str
-#     location: Location
-#
-# class PostIn(BaseModel):
-#     content: str
-#     image: Optional[Base64Str]
-#     location: Location
 
 
 class UserOut(BaseModel):
@@ -91,7 +83,6 @@ class FollowerOut(BaseModel):
 
 class LikeOut(BaseModel):
     username: str
-
 
 
 class CommentIn(BaseModel):
