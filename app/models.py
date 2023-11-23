@@ -22,6 +22,10 @@ class User(BaseModel):
     full_name: str
 
 
+class SearchUser(User):
+    is_following: bool
+
+
 class UserAvatarIn(User):
     avatar_url: str
 

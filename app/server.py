@@ -59,8 +59,7 @@ async def reset_database():
 @app.get("/util")
 async def util():
     print("helping!")
-    # await helper.helper()
-    await helper.reset_database()
+    await methods.helper()
 
 
 # Auth --
@@ -88,9 +87,9 @@ async def get_user_profile(username: str, current_user: User = Depends(auth.get_
     return await methods.get_user_profile(username)
 
 
-@app.get("/client/search", status_code=status.HTTP_200_OK, response_model=List[User])
+@app.get("/client/search", status_code=status.HTTP_200_OK, response_model=List[SearchUser])
 async def search_users(search_query: str, current_user: User = Depends(auth.get_current_active_user)):
-    return await methods.search_users(search_query)
+    return await methods.search_users(search_query, current_user)
 
 
 @app.post("/client/follow", status_code=status.HTTP_201_CREATED)

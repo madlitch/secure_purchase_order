@@ -10,14 +10,12 @@ from models import *
 from sqlalchemy.sql import select, and_, insert, update, or_
 from sqlalchemy import func
 from exceptions import *
-from constants import MEDIA_ROOT
+from constants import MEDIA_ROOT, COMMUNITY
 
 
 async def helper():
-    query = tables.users.select()
-    users = await database.fetch_all(query)
-    for user in users:
-        await create_avatar(user)
+    print(os.getenv('PORT'))
+    print(COMMUNITY)
 
 
 async def create_user(user: UserIn):
@@ -130,12 +128,19 @@ async def get_user_profile(username: str):
     return {**profile, 'posts': posts}
 
 
-async def search_users(search_query: str):
+async def search_users(search_query: str, user: User):
+    following_subquery = select([
+        tables.following.c.following,
+        func.bool_or(tables.following.c.user == user.username).label('is_following')
+    ]).group_by(tables.following.c.following).subquery()
+
     query = select([
         tables.users.c.username,
-        tables.users.c.full_name
+        tables.users.c.full_name,
+        following_subquery.c.is_following
     ]).select_from(
         tables.users
+        .outerjoin(following_subquery, tables.users.c.username == following_subquery.c.following)
     ).where(
         or_(
             tables.users.c.username.like("%" + search_query + "%"),

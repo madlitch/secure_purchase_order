@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os
 import urllib.parse
 
-load_dotenv('.env')
+# load_dotenv('.env')
 
 APP_ROOT = "./"
 MEDIA_ROOT = APP_ROOT + "media/"
@@ -17,3 +17,8 @@ DB_DB = os.getenv('POSTGRES_DB')
 DB_URL = "postgresql://{}:{}@db:{}/{}".format(DB_USER, DB_KEY, DB_PORT, DB_DB)
 
 SECRET_KEY = os.getenv('SECRET_KEY')
+
+COMMUNITY = os.getenv('COMMUNITY')
+
+
+

@@ -6,11 +6,11 @@ services:
     env_file:
       - .env
     environment:
-      - PORT=8080
-      - POSTGRES_PORT=5432
-      - COMMUNITY=stringshare.ca
+      - PORT=8081
+      - POSTGRES_P0RT=5433
+      - COMMUNITY=ontariotechu.ca
     ports:
-    - "8080:80"
+      - "8081:80"
     depends_on:
       db:
         condition: service_healthy
@@ -21,8 +21,10 @@ services:
     image: postgres:13
     env_file:
       - .env
+    environment:
+      - PGPORT=5433
     ports:
-      - "5432:5432"
+      - "5433:5433"
     volumes:
       - db-data:/var/lib/postgresql/data/
     healthcheck:
