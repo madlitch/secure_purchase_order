@@ -1,6 +1,6 @@
 insert into public.user_credentials (username, hashed_password, salt, disabled, date_created)
-values  ('lleece0', '$2b$12$ZrelwtZvxULkUJn6j0uV0.SFfu5Vc1rtlpEyQeVQ7t5gPIODuMk3K', 'b''$2b$10$AhGmyuxUw0flJQBldZ1BNu''', null, '2023-11-06 19:00:46.673328'),
-        ('ifinders1', '$2b$12$ZVpCZOBLOMA7hPkVtvbfGeq60CxjpwEk5.o9ZY4esQ7lUlDLaA6SO', 'b''$2b$10$OldR4vT68axuoxug.5r93u''', null, '2023-11-06 19:00:46.673328'),
-        ('cacres2', '$2b$12$ceZP5ihujM23/NyC0U6/7u1Q/nrS1TweOhPk4ALCoNlDoZZkimXAS', 'b''$2b$10$jf1MG8AOzM.wTxrTqTbMf.''', null, '2023-11-06 19:00:46.673328'),
-        ('glawfull3', '$2b$12$OKrlHJwSH29jTAusiCsKFOTffDPLqg.eK2WHjaGYy47w/MlQrrSLO', 'b''$2b$10$8bLSG8fYA2FN7sU4LkJt9u''', null, '2023-11-06 19:00:46.673328'),
-        ('kdjakovic4', '$2b$12$46bGJAnWTqkg5qtQyC2Hb.IiBHW81UbwSHlSZVeJuLqLMhXpWW9i.', 'b''$2b$10$LqBW9ch46UglCAHpFYIHge''', null, '2023-11-06 19:00:46.673328');
+values  ('kdjakovic4@stringshare.ca', '$2b$12$Oz0SaTs6pM3sHVZv4iNi3.HbREWcb0.5DE63Og6dQHzsN8rDqcyPO', 'b''$2b$10$dkT9Xea0TeuLdnWPJDebpO''', false, '2023-11-06 19:00:46.673328'),
+        ('glawfull3@stringshare.ca', '$2b$12$xztKKDbDlZG..BPf0ceDKu9z/g/k1nsXms5INuMrxZCzpJ8gfaGBi', 'b''$2b$10$XnaBNeNpRnljIkFyEJ9kV.''', false, '2023-11-06 19:00:46.673328'),
+        ('lleece0@stringshare.ca', '$2b$12$rncFA1OAA3sM2xn.ODToJeqylSJxSBoMpk37NrqjkeRogymw2Fh/C', 'b''$2b$10$Lyh.9L3gTIH7zV8mGHUF7u''', false, '2023-11-06 19:00:46.673328'),
+        ('ifinders1@stringshare.ca', '$2b$12$q4CBZX3Y32RvLMyjLy71pu/MqQgBIaRqylzZ6aQ3VEaRKcQ8/FKTa', 'b''$2b$10$uATUAbDZoKk/f56Cj.ynBO''', false, '2023-11-06 19:00:46.673328'),
+        ('cacres2@stringshare.ca', '$2b$12$O9206qiIbXwXlAabVEGKcO8SYTMYdhvQEaperAGtFZ4wUDM.izA26', 'b''$2b$10$WacF3yhLCUNPtLZDYWh2/e''', false, '2023-11-06 19:00:46.673328');

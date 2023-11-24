@@ -80,12 +80,6 @@ async def get_current_active_user(current_user: User = Depends(get_current_user)
     return current_user
 
 
-async def get_current_admin(current_user: User = Depends(get_current_user)):
-    if current_user.is_admin is True:
-        return current_user
-    raise exceptions.API_401_CREDENTIALS_EXCEPTION
-
-
 async def login(form_data):
     user = await authenticate_user(form_data.username, form_data.password)
     if not user:

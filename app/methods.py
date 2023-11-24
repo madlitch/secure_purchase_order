@@ -1,29 +1,27 @@
+from fastapi import UploadFile
+from sqlalchemy.sql import select, insert, update, or_
+from sqlalchemy import func
+
+from database import database
+from constants import MEDIA_ROOT, COMMUNITY
+
 import os.path
 import auth
 import tables
 import aiofiles
 import requests
-
-from database import database
-from fastapi import UploadFile
-from models import *
-from sqlalchemy.sql import select, and_, insert, update, or_
-from sqlalchemy import func
-from exceptions import *
-from constants import MEDIA_ROOT, COMMUNITY
+import exceptions
+import models
 
 
-async def helper():
-    print(os.getenv('PORT'))
-    print(COMMUNITY)
-
-
-async def create_user(user: UserIn):
+async def create_user(user: models.UserIn):
+    if "@" + COMMUNITY not in user.username:
+        user.username = user.username + "@" + COMMUNITY
     user.username = user.username.lower()
     query = tables.users.select().where(tables.users.c.username == user.username)
     existing_user = await database.execute(query)
     if existing_user:
-        raise API_409_USERNAME_CONFLICT_EXCEPTION
+        raise exceptions.API_409_USERNAME_CONFLICT_EXCEPTION
     else:
         async with (database.transaction()):
             try:
@@ -46,7 +44,7 @@ async def create_user(user: UserIn):
             # await database.rollback()
 
 
-async def create_avatar(user: User):
+async def create_avatar(user: models.User):
     params = {
         "name": user.full_name,
         "background": "random"
@@ -63,7 +61,7 @@ async def get_user(username: str):
     if user:
         return user
     else:
-        raise API_404_NOT_FOUND_EXCEPTION
+        raise exceptions.API_404_NOT_FOUND_EXCEPTION
 
 
 async def get_user_profile(username: str):
@@ -128,7 +126,12 @@ async def get_user_profile(username: str):
     return {**profile, 'posts': posts}
 
 
-async def search_users(search_query: str, user: User):
+async def get_activity(user: models.User):
+    query = select([tables.activity]).where(tables.activity.c.user == user.username)
+    return await database.fetch_all(query)
+
+
+async def search_users(search_query: str, user: models.User):
     following_subquery = select([
         tables.following.c.following,
         func.bool_or(tables.following.c.user == user.username).label('is_following')
@@ -150,38 +153,36 @@ async def search_users(search_query: str, user: User):
     return await database.fetch_all(query)
 
 
-async def get_followers(user: User):
+async def get_followers(user: models.User):
     query = select(tables.followers).where(tables.followers.c.user == user.username)
     followers = await database.fetch_all(query)
     return followers
 
 
-async def get_following(user: User):
+async def get_following(user: models.User):
     query = select(tables.following.c.following).where(tables.following.c.user == user.username)
     following = await database.fetch_all(query)
     return following
 
 
-async def get_follower_count(user: User):
+async def get_follower_count(user: models.User):
     query = select([func.count()]).select_from(tables.followers).where(tables.followers.c.user == user.username)
     followers = await database.execute(query)
     return followers
 
 
-async def get_following_count(user: User):
+async def get_following_count(user: models.User):
     query = select([func.count()]).select_from(tables.following).where(tables.following.c.user == user.username)
     following = await database.execute(query)
     return following
 
 
 async def create_bio(bio, user):
-    query = update(tables.users).where(tables.users.c.username == user.username).values(
-        bio=bio,
-    )
+    query = update(tables.users).where(tables.users.c.username == user.username).values(bio=bio)
     await database.execute(query)
 
 
-async def update_avatar(photo: UploadFile, user: User):
+async def update_avatar(photo: UploadFile, user: models.User):
     _, extension = os.path.splitext(photo.filename)
     url = str(user.username) + extension
     async with aiofiles.open(os.path.join(MEDIA_ROOT, url), "wb") as out_file:
@@ -190,7 +191,40 @@ async def update_avatar(photo: UploadFile, user: User):
     await database.execute(query)
 
 
-async def get_feed(user: User):
+async def get_post(post_id: models.UUID):
+    comments_subquery = select([
+        tables.comments.c.post_id,
+        func.count().label('comments')
+    ]).group_by(tables.comments.c.post_id).subquery()
+
+    likes_subquery = select([
+        tables.likes.c.post_id,
+        func.count().label('likes')
+    ]).group_by(tables.likes.c.post_id).subquery()
+
+    query = select([
+        tables.posts,
+        tables.users,
+        func.coalesce(comments_subquery.c.comments, 0).label('comments'),
+        func.coalesce(likes_subquery.c.likes, 0).label('likes'),
+        tables.post_images.c.image_url,
+        tables.post_locations.c.latitude,
+        tables.post_locations.c.longitude
+    ]).select_from(
+        tables.posts
+        .join(tables.users, tables.posts.c.username == tables.users.c.username)
+        .outerjoin(comments_subquery, comments_subquery.c.post_id == tables.posts.c.post_id)
+        .outerjoin(likes_subquery, likes_subquery.c.post_id == tables.posts.c.post_id)
+        .outerjoin(tables.post_images, tables.post_images.c.post_id == tables.posts.c.post_id)
+        .outerjoin(tables.post_locations, tables.post_locations.c.post_id == tables.posts.c.post_id)
+    ).where(
+        tables.posts.c.post_id == post_id
+    )
+    feed = await database.fetch_one(query)
+    return feed
+
+
+async def get_feed(user: models.User):
     comments_subquery = select([
         tables.comments.c.post_id,
         func.count().label('comments')
@@ -226,13 +260,13 @@ async def get_feed(user: User):
     return feed
 
 
-async def get_post_likes(post_id: UUID):
+async def get_post_likes(post_id: models.UUID):
     query = tables.likes.select().where(tables.likes.c.post_id == post_id)
     likes = await database.fetch_all(query)
     return likes
 
 
-async def get_post_comments(post_id: UUID):
+async def get_post_comments(post_id: models.UUID):
     query = select([
         tables.comments,
         tables.users
@@ -248,7 +282,7 @@ async def get_post_comments(post_id: UUID):
     return comments
 
 
-async def create_post(post: str, latitude: float, longitude: float, photo: UploadFile, user: User):
+async def create_post(post: str, latitude: float, longitude: float, photo: UploadFile, user: models.User):
     async with (database.transaction()):
         try:
             post_query = insert(tables.posts).values(username=user.username, content=post)
@@ -273,7 +307,7 @@ async def create_post(post: str, latitude: float, longitude: float, photo: Uploa
             # await database.rollback()
 
 
-async def follow_user(username: str, user: User):
+async def follow_user(username: str, user: models.User):
     async with (database.transaction()):
         try:
             query = insert(tables.following).values(user=user.username, following=username)
@@ -283,20 +317,56 @@ async def follow_user(username: str, user: User):
         except Exception as e:
             print(e)
             # await database.rollback()
+    await log_action(user, models.ActivityAction.follow, username=username)
 
 
-async def create_comment(comment: CommentIn, user: User):
+async def create_comment(comment: models.CommentIn, user: models.User):
     query = insert(tables.comments).values(
         post_id=comment.post_id,
         username=user.username,
         content=comment.content
     )
     await database.execute(query)
+    await log_action(user, models.ActivityAction.comment, post_id=comment.post_id)
 
 
-async def create_like(post_id: UUID, user: User):
+async def create_like(post_id: models.UUID, user: models.User):
     query = insert(tables.likes).values(
         post_id=post_id,
         username=user.username
     )
     await database.execute(query)
+    await log_action(user, models.ActivityAction.like, post_id=post_id)
+
+
+async def get_post_author(post_id: models.UUID):
+    query = select([
+        tables.posts.c.post_id,
+        tables.users.c.username
+    ]).select_from(
+        tables.posts
+        .join(tables.users, tables.posts.c.username == tables.users.c.username)
+    ).where(
+        tables.posts.c.post_id == post_id
+    )
+    return await database.fetch_one(query)
+
+
+async def log_action(action_user: models.User, action: models.ActivityAction, username: str = None,
+                     post_id: models.UUID = None):
+    if username is None and post_id is not None:
+        author = await get_post_author(post_id)
+        query = insert(tables.activity).values(
+            user=author.username,
+            action_user=action_user.username,
+            action=action,
+            post_id=post_id
+        )
+        await database.execute(query)
+    elif username is not None and action is models.ActivityAction.follow:
+        query = insert(tables.activity).values(
+            user=username,
+            action_user=action_user.username,
+            action=action
+        )
+        await database.execute(query)

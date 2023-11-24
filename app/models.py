@@ -1,9 +1,9 @@
 from pydantic import BaseModel
 from typing import Optional, Any, List, Dict
-from pydantic.types import Base64Str
-import enum
-import datetime
 from uuid import UUID
+
+import datetime
+import enum
 
 
 # Auth
@@ -92,3 +92,15 @@ class LikeOut(BaseModel):
 class CommentIn(BaseModel):
     post_id: UUID
     content: str
+
+
+class ActivityAction(enum.Enum):
+    follow = 0
+    like = 1
+    comment = 2
+
+
+class ActivityOut(BaseModel):
+    action_user: str
+    action: str
+    post_id: Optional[UUID]
