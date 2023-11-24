@@ -127,7 +127,14 @@ async def get_user_profile(username: str):
 
 
 async def get_activity(user: models.User):
-    query = select([tables.activity]).where(tables.activity.c.user == user.username)
+    query = select([
+        tables.activity,
+        tables.users.c.full_name,
+        tables.users.c.avatar_url
+    ]).select_from(
+        tables.activity
+        .join(tables.users, tables.users.c.username == tables.activity.c.action_user)
+    ).where(tables.activity.c.user == user.username)
     return await database.fetch_all(query)
 
 
@@ -140,6 +147,7 @@ async def search_users(search_query: str, user: models.User):
     query = select([
         tables.users.c.username,
         tables.users.c.full_name,
+        tables.users.c.avatar_url,
         following_subquery.c.is_following
     ]).select_from(
         tables.users

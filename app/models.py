@@ -24,6 +24,7 @@ class User(BaseModel):
 
 class SearchUser(User):
     is_following: bool
+    avatar_url: str
 
 
 class UserAvatarIn(User):
@@ -103,4 +104,6 @@ class ActivityAction(enum.Enum):
 class ActivityOut(BaseModel):
     action_user: str
     action: str
+    full_name: str
+    avatar_url: str
     post_id: Optional[UUID]
