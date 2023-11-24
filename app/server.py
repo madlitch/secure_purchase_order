@@ -169,6 +169,9 @@ async def create_like(post_id: UUID, current_user: models.User = Depends(auth.ge
 
 @app.get("/client/media/", status_code=status.HTTP_200_OK)
 async def get_photo(url: str = None):
+    nurl = url.split("%40")[0]
+    print(url)
+    print(nurl)
     path = os.path.join(constants.MEDIA_ROOT, url)
     if os.path.isfile(path):
         return FileResponse(path)
