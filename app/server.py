@@ -59,9 +59,9 @@ async def reset_database():
 async def util():
     print("helping!")
     # await helper.helper()
-    # await helper.populate_activity()
+    await helper.populate_activity()
     # await helper.fix_followers()
-    await helper.update_password()
+    # await helper.update_password()
 
 
 # Auth --
@@ -81,12 +81,12 @@ async def create_user(user: models.UserIn):
 
 @app.get("/client/me", status_code=status.HTTP_200_OK, response_model=models.UserOut)
 async def get_me(current_user: models.User = Depends(auth.get_current_active_user)):
-    return await methods.get_user_profile(current_user.username)
+    return await methods.get_user_profile(current_user.username, current_user)
 
 
 @app.get("/client/users", status_code=status.HTTP_200_OK, response_model=models.UserOut)
 async def get_user_profile(username: str, current_user: models.User = Depends(auth.get_current_active_user)):
-    return await methods.get_user_profile(username)
+    return await methods.get_user_profile(username, current_user)
 
 
 @app.get("/client/activity", status_code=status.HTTP_200_OK, response_model=List[models.ActivityOut])
@@ -133,7 +133,7 @@ async def get_feed(current_user: models.User = Depends(auth.get_current_active_u
 
 @app.get("/client/post", status_code=status.HTTP_200_OK, response_model=models.PostOut)
 async def get_post(post_id: UUID, current_user: models.User = Depends(auth.get_current_active_user)):
-    return await methods.get_post(post_id)
+    return await methods.get_post(post_id, current_user)
 
 
 @app.get("/client/likes", status_code=status.HTTP_200_OK, response_model=List[models.LikeOut])

@@ -1,5 +1,5 @@
 from fastapi import UploadFile
-from sqlalchemy.sql import select, insert, update, or_
+from sqlalchemy.sql import select, insert, update, or_, delete
 from sqlalchemy import func
 
 from database import database
@@ -64,7 +64,7 @@ async def get_user(username: str):
         raise exceptions.API_404_NOT_FOUND_EXCEPTION
 
 
-async def get_user_profile(username: str):
+async def get_user_profile(username: str, user: models.User):
     followers_subquery = select([
         tables.followers.c.user,
         func.count().label('followers')
@@ -99,6 +99,11 @@ async def get_user_profile(username: str):
         func.count().label('likes')
     ]).group_by(tables.likes.c.post_id).subquery()
 
+    liked_subquery = select([
+        tables.likes.c.post_id,
+        func.bool_or(tables.likes.c.username == user.username).label('liked')
+    ]).group_by(tables.likes.c.post_id).subquery()
+
     query = select([
         tables.posts,
         tables.users.c.username,
@@ -106,6 +111,7 @@ async def get_user_profile(username: str):
         tables.users.c.avatar_url,
         func.coalesce(comments_subquery.c.comments, 0).label('comments'),
         func.coalesce(likes_subquery.c.likes, 0).label('likes'),
+        func.coalesce(liked_subquery.c.liked, False).label('liked'),
         tables.post_images.c.image_url,
         tables.post_locations.c.latitude,
         tables.post_locations.c.longitude
@@ -134,7 +140,9 @@ async def get_activity(user: models.User):
     ]).select_from(
         tables.activity
         .join(tables.users, tables.users.c.username == tables.activity.c.action_user)
-    ).where(tables.activity.c.user == user.username)
+    ).where(tables.activity.c.user == user.username).order_by(
+        tables.activity.c.datetime.desc()
+    )
     return await database.fetch_all(query)
 
 
@@ -199,7 +207,7 @@ async def update_avatar(photo: UploadFile, user: models.User):
     await database.execute(query)
 
 
-async def get_post(post_id: models.UUID):
+async def get_post(post_id: models.UUID, user: models.User):
     comments_subquery = select([
         tables.comments.c.post_id,
         func.count().label('comments')
@@ -210,11 +218,17 @@ async def get_post(post_id: models.UUID):
         func.count().label('likes')
     ]).group_by(tables.likes.c.post_id).subquery()
 
+    liked_subquery = select([
+        tables.likes.c.post_id,
+        func.bool_or(tables.likes.c.username == user.username).label('liked')
+    ]).group_by(tables.likes.c.post_id).subquery()
+
     query = select([
         tables.posts,
         tables.users,
         func.coalesce(comments_subquery.c.comments, 0).label('comments'),
         func.coalesce(likes_subquery.c.likes, 0).label('likes'),
+        func.coalesce(liked_subquery.c.liked, False).label('liked'),
         tables.post_images.c.image_url,
         tables.post_locations.c.latitude,
         tables.post_locations.c.longitude
@@ -243,11 +257,17 @@ async def get_feed(user: models.User):
         func.count().label('likes')
     ]).group_by(tables.likes.c.post_id).subquery()
 
+    liked_subquery = select([
+        tables.likes.c.post_id,
+        func.bool_or(tables.likes.c.username == user.username).label('liked')
+    ]).group_by(tables.likes.c.post_id).subquery()
+
     query = select([
         tables.posts,
         tables.users,
         func.coalesce(comments_subquery.c.comments, 0).label('comments'),
         func.coalesce(likes_subquery.c.likes, 0).label('likes'),
+        func.coalesce(liked_subquery.c.liked, False).label('liked'),
         tables.post_images.c.image_url,
         tables.post_locations.c.latitude,
         tables.post_locations.c.longitude
@@ -257,6 +277,7 @@ async def get_feed(user: models.User):
         .join(tables.users, tables.posts.c.username == tables.users.c.username)
         .outerjoin(comments_subquery, comments_subquery.c.post_id == tables.posts.c.post_id)
         .outerjoin(likes_subquery, likes_subquery.c.post_id == tables.posts.c.post_id)
+        .outerjoin(liked_subquery, liked_subquery.c.post_id == tables.posts.c.post_id)
         .outerjoin(tables.post_images, tables.post_images.c.post_id == tables.posts.c.post_id)
         .outerjoin(tables.post_locations, tables.post_locations.c.post_id == tables.posts.c.post_id)
     ).where(
@@ -339,12 +360,23 @@ async def create_comment(comment: models.CommentIn, user: models.User):
 
 
 async def create_like(post_id: models.UUID, user: models.User):
-    query = insert(tables.likes).values(
-        post_id=post_id,
-        username=user.username
-    )
-    await database.execute(query)
-    await log_action(user, models.ActivityAction.like, post_id=post_id)
+    existing_query = select([tables.likes]).where(
+        tables.likes.c.post_id == post_id,
+        tables.likes.c.username == user.username)
+    existing = await database.fetch_one(existing_query)
+    if existing:
+        query = delete(tables.likes).where(
+            tables.likes.c.post_id == post_id,
+            tables.likes.c.username == user.username
+        )
+        await database.execute(query)
+    else:
+        query = insert(tables.likes).values(
+            post_id=post_id,
+            username=user.username
+        )
+        await database.execute(query)
+        await log_action(user, models.ActivityAction.like, post_id=post_id)
 
 
 async def get_post_author(post_id: models.UUID):

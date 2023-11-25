@@ -80,4 +80,5 @@ activity = (
           Column('action_user', String(100), ForeignKey('users.username', ondelete='cascade')),
           Column('action', Enum(models.ActivityAction), primary_key=True, default=None),
           Column('post_id', ForeignKey('posts.post_id', ondelete='cascade'), default=None),
+          Column('datetime', DateTime, server_default=func.now())
           ))

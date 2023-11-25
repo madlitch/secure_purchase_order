@@ -53,6 +53,7 @@ class PostOut(BaseModel):
     longitude: float
     comments: int
     likes: int
+    liked: bool
 
 
 class Location(BaseModel):
