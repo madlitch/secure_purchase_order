@@ -13,6 +13,7 @@ import models
 
 async def reset_database():
     print("Resetting database...")
+    await database.execute(delete(tables.activity))
     await database.execute(delete(tables.post_images))
     await database.execute(delete(tables.post_locations))
     await database.execute(delete(tables.likes))
