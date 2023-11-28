@@ -66,10 +66,9 @@ followers = (
           Column('follower', String(100), ForeignKey('users.username', ondelete='cascade'), primary_key=True),
           ))
 
-
 following = (
     Table('following', metadata,
-          Column('user', String(100), ForeignKey('users.username'), primary_key=True),
+          Column('user', String(100), ForeignKey('users.username', ondelete='cascade'), primary_key=True),
           Column('following', String(100), ForeignKey('users.username', ondelete='cascade'), primary_key=True),
           ))
 
@@ -81,4 +80,16 @@ activity = (
           Column('action', Enum(models.ActivityAction), primary_key=True, default=None),
           Column('post_id', ForeignKey('posts.post_id', ondelete='cascade'), default=None),
           Column('datetime', DateTime, server_default=func.now())
+          ))
+
+communities = (
+    Table('communities', metadata,
+          Column('url', String(100), primary_key=True),
+          ))
+
+
+following_communities = (
+    Table('following_communities', metadata,
+          Column('username', String(100), ForeignKey('users.username', ondelete='cascade'), primary_key=True),
+          Column('community', String(100), ForeignKey('communities.url', ondelete='cascade'), primary_key=True),
           ))

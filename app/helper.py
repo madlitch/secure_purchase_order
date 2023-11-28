@@ -3,7 +3,7 @@ import os.path
 from sqlalchemy.sql import delete, select, insert, update
 from database import database
 
-from constants import APP_ROOT, COMMUNITY
+from constants import DATA_ROOT, COMMUNITY
 
 import tables
 import auth
@@ -13,6 +13,8 @@ import models
 
 async def reset_database():
     print("Resetting database...")
+    await database.execute(delete(tables.communities))
+    await database.execute(delete(tables.following_communities))
     await database.execute(delete(tables.activity))
     await database.execute(delete(tables.post_images))
     await database.execute(delete(tables.post_locations))
@@ -24,43 +26,43 @@ async def reset_database():
     await database.execute(delete(tables.user_credentials))
     await database.execute(delete(tables.users))
 
-    with open(os.path.join(APP_ROOT, "data", "users.sql"), 'r') as file:
+    with open(os.path.join(DATA_ROOT, "users.sql"), 'r') as file:
         user_commands = file.read()
         await database.execute(user_commands)
 
-    with open(os.path.join(APP_ROOT, "data", "user_credentials.sql"), 'r') as file:
+    with open(os.path.join(DATA_ROOT, "user_credentials.sql"), 'r') as file:
         user_commands = file.read()
         await database.execute(user_commands)
 
-    with open(os.path.join(APP_ROOT, "data", "followers.sql"), 'r') as file:
+    with open(os.path.join(DATA_ROOT, "followers.sql"), 'r') as file:
         user_commands = file.read()
         await database.execute(user_commands)
 
-    with open(os.path.join(APP_ROOT, "data", "following.sql"), 'r') as file:
+    with open(os.path.join(DATA_ROOT, "following.sql"), 'r') as file:
         user_commands = file.read()
         await database.execute(user_commands)
 
-    with open(os.path.join(APP_ROOT, "data", "posts.sql"), 'r') as file:
+    with open(os.path.join(DATA_ROOT, "posts.sql"), 'r') as file:
         user_commands = file.read()
         await database.execute(user_commands)
 
-    with open(os.path.join(APP_ROOT, "data", "comments.sql"), 'r') as file:
+    with open(os.path.join(DATA_ROOT, "comments.sql"), 'r') as file:
         user_commands = file.read()
         await database.execute(user_commands)
 
-    with open(os.path.join(APP_ROOT, "data", "likes.sql"), 'r') as file:
+    with open(os.path.join(DATA_ROOT, "likes.sql"), 'r') as file:
         user_commands = file.read()
         await database.execute(user_commands)
 
-    with open(os.path.join(APP_ROOT, "data", "post_locations.sql"), 'r') as file:
+    with open(os.path.join(DATA_ROOT, "post_locations.sql"), 'r') as file:
         user_commands = file.read()
         await database.execute(user_commands)
 
-    with open(os.path.join(APP_ROOT, "data", "post_images.sql"), 'r') as file:
+    with open(os.path.join(DATA_ROOT, "post_images.sql"), 'r') as file:
         user_commands = file.read()
         await database.execute(user_commands)
 
-    with open(os.path.join(APP_ROOT, "data", "activity.sql"), 'r') as file:
+    with open(os.path.join(DATA_ROOT, "activity.sql"), 'r') as file:
         user_commands = file.read()
         await database.execute(user_commands)
 
@@ -125,9 +127,10 @@ async def update_password():
     users = await database.fetch_all(q)
     for user in users:
         salt = auth.gen_salt()
-        query = ((update(tables.user_credentials)
-                 .where(tables.user_credentials.c.username == user.username))
-                 .values(
+        query = ((
+            update(tables.user_credentials)
+            .where(tables.user_credentials.c.username == user.username)
+        ).values(
             hashed_password=auth.get_password_hash("a" + salt),
             salt=salt,
             disabled=False

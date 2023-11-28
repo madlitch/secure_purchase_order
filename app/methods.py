@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from fastapi import UploadFile
 from sqlalchemy.sql import select, insert, update, or_, delete
 from sqlalchemy import func
@@ -12,6 +14,7 @@ import aiofiles
 import requests
 import exceptions
 import models
+import network
 
 
 async def create_user(user: models.UserIn):
@@ -147,26 +150,29 @@ async def get_activity(user: models.User):
 
 
 async def search_users(search_query: str, user: models.User):
-    following_subquery = select([
-        tables.following.c.following,
-        func.bool_or(tables.following.c.user == user.username).label('is_following')
-    ]).group_by(tables.following.c.following).subquery()
+    if '@' in search_query and not network.is_user_in_community(search_query):
+        return await network.search_community(search_query, user)
+    else:
+        following_subquery = select([
+            tables.following.c.following,
+            func.bool_or(tables.following.c.user == user.username).label('is_following')
+        ]).group_by(tables.following.c.following).subquery()
 
-    query = select([
-        tables.users.c.username,
-        tables.users.c.full_name,
-        tables.users.c.avatar_url,
-        following_subquery.c.is_following
-    ]).select_from(
-        tables.users
-        .outerjoin(following_subquery, tables.users.c.username == following_subquery.c.following)
-    ).where(
-        or_(
-            tables.users.c.username.like("%" + search_query + "%"),
-            tables.users.c.full_name.like("%" + search_query + "%"),
+        query = select([
+            tables.users.c.username,
+            tables.users.c.full_name,
+            tables.users.c.avatar_url,
+            following_subquery.c.is_following
+        ]).select_from(
+            tables.users
+            .outerjoin(following_subquery, tables.users.c.username == following_subquery.c.following)
+        ).where(
+            or_(
+                tables.users.c.username.like("%" + search_query + "%"),
+                tables.users.c.full_name.like("%" + search_query + "%"),
+            )
         )
-    )
-    return await database.fetch_all(query)
+        return await database.fetch_all(query)
 
 
 async def get_followers(user: models.User):
@@ -207,7 +213,7 @@ async def update_avatar(photo: UploadFile, user: models.User):
     await database.execute(query)
 
 
-async def get_post(post_id: models.UUID, user: models.User):
+async def get_post(post_id: UUID, user: models.User):
     comments_subquery = select([
         tables.comments.c.post_id,
         func.count().label('comments')
@@ -289,13 +295,13 @@ async def get_feed(user: models.User):
     return feed
 
 
-async def get_post_likes(post_id: models.UUID):
+async def get_post_likes(post_id: UUID):
     query = tables.likes.select().where(tables.likes.c.post_id == post_id)
     likes = await database.fetch_all(query)
     return likes
 
 
-async def get_post_comments(post_id: models.UUID):
+async def get_post_comments(post_id: UUID):
     query = select([
         tables.comments,
         tables.users
@@ -323,6 +329,34 @@ async def create_post(post: str, latitude: float, longitude: float, photo: Uploa
                     await out_file.write(photo.file.read())
                 image_query = insert(tables.post_images).values(post_id=post_id, image_url=url)
                 await database.execute(image_query)
+                await network.propagate_post(post_id, post, latitude, longitude, user, url)
+            else:
+                await network.propagate_post(post_id, post, latitude, longitude, user, None)
+
+            location_query = insert(
+                tables.post_locations
+            ).values(post_id=post_id,
+                     latitude=latitude,
+                     longitude=longitude)
+            await database.execute(location_query)
+        except Exception as e:
+            print(e)
+            # await database.rollback()
+
+
+async def server_create_post(post_id: str, post: str, latitude: float, longitude: float, photo: UploadFile,
+                             username: str):
+    async with (database.transaction()):
+        try:
+            post_query = insert(tables.posts).values(post_id=post_id, username=username, content=post)
+            await database.execute(post_query)
+            if photo:
+                _, extension = os.path.splitext(photo.filename)
+                url = str(post_id) + extension
+                async with aiofiles.open(os.path.join(MEDIA_ROOT, url), "wb") as out_file:
+                    await out_file.write(photo.file.read())
+                image_query = insert(tables.post_images).values(post_id=post_id, image_url=url)
+                await database.execute(image_query)
 
             location_query = insert(
                 tables.post_locations
@@ -337,6 +371,8 @@ async def create_post(post: str, latitude: float, longitude: float, photo: Uploa
 
 
 async def follow_user(username: str, user: models.User):
+    if '@' in username and not network.is_user_in_community(username):
+        await network.follow_user(username, user)
     async with (database.transaction()):
         try:
             query = insert(tables.following).values(user=user.username, following=username)
@@ -349,7 +385,47 @@ async def follow_user(username: str, user: models.User):
     await log_action(user, models.ActivityAction.follow, username=username)
 
 
-async def create_comment(comment: models.CommentIn, user: models.User):
+async def server_follow_user(username: str, user: models.ServerUser):
+    query = tables.users.select().where(tables.users.c.username == user.username)
+    existing_user = await database.execute(query)
+    if not existing_user:
+        query = insert(tables.users).values(
+            username=user.username,
+            full_name=user.full_name,
+            avatar_url=user.avatar_url,
+            bio=user.bio
+        )
+        await database.execute(query)
+    async with (database.transaction()):
+        try:
+            community = user.username.split('@')[1]  # get following user's community
+            query = insert(tables.communities).values(
+                url=community
+            )
+            await database.execute(query)
+            query = insert(tables.following_communities).values(
+                username=username,  # local user
+                community=community
+            )
+            await database.execute(query)
+        except Exception as e:
+            print(e)
+
+    async with (database.transaction()):
+        try:
+            query = insert(tables.following).values(user=user.username, following=username)
+            await database.execute(query)
+            query = insert(tables.followers).values(user=username, follower=user.username)
+            await database.execute(query)
+        except Exception as e:
+            print(e)
+            # await database.rollback()
+    await log_action(user, models.ActivityAction.follow, username=username)
+    query = select([tables.users]).where(tables.users.c.username == username)
+    return await database.fetch_one(query)
+
+
+async def create_comment(comment: models.Comment, user: models.User):
     query = insert(tables.comments).values(
         post_id=comment.post_id,
         username=user.username,
@@ -357,9 +433,21 @@ async def create_comment(comment: models.CommentIn, user: models.User):
     )
     await database.execute(query)
     await log_action(user, models.ActivityAction.comment, post_id=comment.post_id)
+    author = await get_post_author(comment.post_id)
+    await network.propagate_comment(comment, user, author.username)
 
 
-async def create_like(post_id: models.UUID, user: models.User):
+async def server_create_comment(comment: models.ServerComment):
+    query = insert(tables.comments).values(
+        post_id=comment.comment.post_id,
+        username=comment.user.username,
+        content=comment.comment.content
+    )
+    await database.execute(query)
+    await log_action(comment.user, models.ActivityAction.comment, post_id=comment.comment.post_id)
+
+
+async def create_like(post_id: UUID, user: models.User):
     existing_query = select([tables.likes]).where(
         tables.likes.c.post_id == post_id,
         tables.likes.c.username == user.username)
@@ -377,9 +465,31 @@ async def create_like(post_id: models.UUID, user: models.User):
         )
         await database.execute(query)
         await log_action(user, models.ActivityAction.like, post_id=post_id)
+    author = await get_post_author(post_id)
+    await network.propagate_like(post_id, user, author.username)
 
 
-async def get_post_author(post_id: models.UUID):
+async def server_create_like(like: models.ServerLike):
+    existing_query = select([tables.likes]).where(
+        tables.likes.c.post_id == like.post_id,
+        tables.likes.c.username == like.user.username)
+    existing = await database.fetch_one(existing_query)
+    if existing:
+        query = delete(tables.likes).where(
+            tables.likes.c.post_id == like.post_id,
+            tables.likes.c.username == like.user.username
+        )
+        await database.execute(query)
+    else:
+        query = insert(tables.likes).values(
+            post_id=like.post_id,
+            username=like.user.username
+        )
+        await database.execute(query)
+        await log_action(like.user, models.ActivityAction.like, post_id=like.post_id)
+
+
+async def get_post_author(post_id: UUID):
     query = select([
         tables.posts.c.post_id,
         tables.users.c.username
@@ -393,7 +503,7 @@ async def get_post_author(post_id: models.UUID):
 
 
 async def log_action(action_user: models.User, action: models.ActivityAction, username: str = None,
-                     post_id: models.UUID = None):
+                     post_id: UUID = None):
     if username is None and post_id is not None:
         author = await get_post_author(post_id)
         query = insert(tables.activity).values(

@@ -9,8 +9,9 @@ services:
       - PORT=8080
       - POSTGRES_PORT=5432
       - COMMUNITY=stringshare.ca
+      - SERVER_ADDRESS=http://192.168.2.133
     ports:
-    - "8080:80"
+      - "8080:80"
     depends_on:
       db:
         condition: service_healthy

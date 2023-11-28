@@ -23,11 +23,11 @@ class User(BaseModel):
 
 
 class SearchUser(User):
-    is_following: bool
+    is_following: Optional[bool]
     avatar_url: str
 
 
-class UserAvatarIn(User):
+class UserAvatar(User):
     avatar_url: str
 
 
@@ -36,34 +36,27 @@ class UserIn(User):
 
 
 class UserAuthIn(User):
-    username: str
     hashed_password: str
     salt: str
 
 
-class PostOut(BaseModel):
+class Post(User):
     post_id: UUID
-    username: str
-    full_name: str
     content: str
     date_posted: datetime.datetime
-    avatar_url: Optional[str]
-    image_url: Optional[str]
     latitude: float
     longitude: float
+
+
+class PostOut(Post):
+    avatar_url: Optional[str]
+    image_url: Optional[str]
     comments: int
     likes: int
     liked: bool
 
 
-class Location(BaseModel):
-    latitude: float
-    longitude: float
-
-
-class UserOut(BaseModel):
-    username: str
-    full_name: str
+class UserOut(User):
     bio: Optional[str]
     avatar_url: Optional[str]
     followers: int
@@ -91,7 +84,7 @@ class LikeOut(BaseModel):
     username: str
 
 
-class CommentIn(BaseModel):
+class Comment(BaseModel):
     post_id: UUID
     content: str
 
@@ -108,3 +101,31 @@ class ActivityOut(BaseModel):
     full_name: str
     avatar_url: str
     post_id: Optional[UUID]
+
+
+class DataIn(BaseModel):
+    test: str
+
+
+class ServerSearchUser(User):
+    search_query: str
+
+
+class ServerUser(User):
+    avatar_url: str
+    bio: str
+
+
+class ServerFollowUser(BaseModel):
+    username: str
+    user: ServerUser
+
+
+class ServerLike(BaseModel):
+    post_id: UUID
+    user: ServerUser
+
+
+class ServerComment(BaseModel):
+    comment: Comment
+    user: ServerUser

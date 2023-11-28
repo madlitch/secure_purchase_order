@@ -16,6 +16,7 @@ import exceptions
 import database
 import constants
 import methods
+import network
 import auth
 
 app = FastAPI()
@@ -59,7 +60,7 @@ async def reset_database():
 async def util():
     print("helping!")
     # await helper.helper()
-    await helper.populate_activity()
+    # await helper.populate_activity()
     # await helper.fix_followers()
     # await helper.update_password()
 
@@ -70,6 +71,40 @@ async def util():
 async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     token = await auth.login(form_data)
     return token
+
+
+# Server --
+
+@app.get("/server/search", status_code=status.HTTP_200_OK, response_model=List[models.SearchUser])
+async def search_users(search_user: models.ServerSearchUser):
+    return await methods.search_users(search_user.search_query, search_user)
+
+
+@app.post("/server/follow", status_code=status.HTTP_201_CREATED, response_model=models.ServerUser)
+async def server_follow_user(users: models.ServerFollowUser):
+    return await methods.server_follow_user(users.username, users.user)
+
+
+@app.post("/server/post", status_code=status.HTTP_201_CREATED)
+async def server_create_post(
+        post_id: str,
+        post: str,
+        latitude: float,
+        longitude: float,
+        username: str,
+        photo: UploadFile = None
+):
+    await methods.server_create_post(post_id, post, latitude, longitude, photo, username)
+
+
+@app.post("/server/comment", status_code=status.HTTP_201_CREATED)
+async def receive_comment(comment: models.ServerComment):
+    return await methods.server_create_comment(comment)
+
+
+@app.post("/server/like", status_code=status.HTTP_201_CREATED)
+async def receive_like(like: models.ServerLike):
+    return await methods.server_create_like(like)
 
 
 # User --
@@ -158,7 +193,7 @@ async def create_post(
 
 
 @app.post("/client/comment", status_code=status.HTTP_201_CREATED)
-async def create_comment(comment: models.CommentIn, current_user: models.User = Depends(auth.get_current_active_user)):
+async def create_comment(comment: models.Comment, current_user: models.User = Depends(auth.get_current_active_user)):
     return await methods.create_comment(comment, current_user)
 
 
@@ -169,9 +204,6 @@ async def create_like(post_id: UUID, current_user: models.User = Depends(auth.ge
 
 @app.get("/client/media/", status_code=status.HTTP_200_OK)
 async def get_photo(url: str = None):
-    nurl = url.split("%40")[0]
-    print(url)
-    print(nurl)
     path = os.path.join(constants.MEDIA_ROOT, url)
     if os.path.isfile(path):
         return FileResponse(path)
