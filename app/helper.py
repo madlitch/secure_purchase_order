@@ -136,3 +136,10 @@ async def update_password():
             disabled=False
         ))
         await database.execute(query)
+
+
+async def create_avatars():
+    q = select([tables.users])
+    users = await database.fetch_all(q)
+    for user in users:
+        await methods.create_avatar(user)
