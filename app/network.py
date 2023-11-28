@@ -112,7 +112,7 @@ async def propagate_post(post_id: UUID, post: str, latitude: float, longitude: f
         'username': user.username,
     }
     for community in communities:
-        url = await get_url(community, 'server/post')
+        url = await get_url(community.community, 'server/post')
         await make_post_request_params(url=url, params=params, data=data)
 
 
