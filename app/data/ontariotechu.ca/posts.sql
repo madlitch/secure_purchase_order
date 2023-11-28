@@ -1,0 +1,16 @@
+insert into public.posts (post_id, username, content, date_posted)
+values  ('06ac928a-6411-4d67-b238-b618b602b2a0', 'nlarvin2@ontariotechu.ca', 'Aenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum.', '2023-11-06 19:00:46.777780'),
+        ('4b6cb16d-1dfb-4665-b302-d91aca6f89ff', 'mramm3@ontariotechu.ca', 'Morbi non lectus. Aliquam sit amet diam in magna bibendum imperdiet. Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis.', '2023-11-06 19:00:46.777780'),
+        ('23f7585e-ca0c-4d6d-9da1-8eb6b262a600', 'dmcgow4@ontariotechu.ca', 'Etiam vel augue. Vestibulum rutrum rutrum neque. Aenean auctor gravida sem.', '2023-11-06 19:00:46.777780'),
+        ('fc9ccfcb-2208-4095-b53e-d85d4dac585e', 'arennocks1@ontariotechu.ca', 'Phasellus in felis. Donec semper sapien a libero. Nam dui.', '2023-11-06 19:00:46.777780'),
+        ('e4d63b2f-4b55-43ba-8dd6-72d448113067', 'nstoneham0@ontariotechu.ca', 'Praesent blandit. Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede.', '2023-11-06 19:00:46.777780'),
+        ('ad2b9ad9-82f0-4f52-8e8e-8e645572495c', 'nlarvin2@ontariotechu.ca', 'Morbi non lectus. Aliquam sit amet diam in magna bibendum imperdiet. Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis.', '2023-11-06 19:00:46.777780'),
+        ('ef6b05f6-5a74-40d7-b38f-71dc50d5fa08', 'mramm3@ontariotechu.ca', 'Curabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est.', '2023-11-06 19:00:46.777780'),
+        ('9eed9aa0-6aee-4650-bdd8-7b4fb069ccdd', 'dmcgow4@ontariotechu.ca', 'Duis bibendum. Morbi non quam nec dui luctus rutrum. Nulla tellus.', '2023-11-06 19:00:46.777780'),
+        ('ede26b84-8885-4899-b861-ce14b3ba2c84', 'arennocks1@ontariotechu.ca', 'Proin leo odio, porttitor id, consequat in, consequat ut, nulla. Sed accumsan felis. Ut at dolor quis odio consequat varius.', '2023-11-06 19:00:46.777780'),
+        ('9006bd21-eb1a-4aae-a9b8-b954052fa395', 'nstoneham0@ontariotechu.ca', 'Maecenas leo odio, condimentum id, luctus nec, molestie sed, justo. Pellentesque viverra pede ac diam. Cras pellentesque volutpat dui.', '2023-11-06 19:00:46.777780'),
+        ('75bd11c6-6327-4457-b816-fed07b6b8846', 'nlarvin2@ontariotechu.ca', 'In congue. Etiam justo. Etiam pretium iaculis justo.', '2023-11-06 19:00:46.777780'),
+        ('16b71447-c10a-43af-8520-5323a858845a', 'mramm3@ontariotechu.ca', 'Proin leo odio, porttitor id, consequat in, consequat ut, nulla. Sed accumsan felis. Ut at dolor quis odio consequat varius.', '2023-11-06 19:00:46.777780'),
+        ('5078f24c-b22a-4563-b297-d9f4a8f568f3', 'dmcgow4@ontariotechu.ca', 'Aenean fermentum. Donec ut mauris eget massa tempor convallis. Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh.', '2023-11-06 19:00:46.777780'),
+        ('4fc6338f-115e-4894-8e40-af4eaae64318', 'arennocks1@ontariotechu.ca', 'Suspendisse potenti. In eleifend quam a odio. In hac habitasse platea dictumst.', '2023-11-06 19:00:46.777780'),
+        ('cac19fc8-a2c4-49c0-8558-5f9242ed79f5', 'nstoneham0@ontariotechu.ca', 'Curabitur at ipsum ac tellus semper interdum. Mauris ullamcorper purus sit amet nulla. Quisque arcu libero, rutrum ac, lobortis vel, dapibus at, diam.', '2023-11-06 19:00:46.777780');

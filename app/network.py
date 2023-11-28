@@ -3,17 +3,12 @@ from uuid import UUID
 from aiohttp import FormData
 
 from database import database
-from constants import MEDIA_ROOT, COMMUNITY, SERVER_ADDRESS, SERVER_PORT
-from sqlalchemy.sql import select, insert, update, or_, delete
-from sqlalchemy import func
+from constants import MEDIA_ROOT, COMMUNITY, SERVER_ADDRESS
+from sqlalchemy.sql import select, insert
 
 import os.path
-import auth
 import tables
-import aiofiles
-import requests
 import aiohttp
-import exceptions
 import models
 
 
@@ -141,7 +136,6 @@ async def propagate_comment(comment: models.Comment, user: models.User, author: 
     await make_post_request(url, json=json)
 
 
-
 async def propagate_like(post_id: UUID, user: models.User, author: str):
     _, community = author.split('@')
     query = select([tables.users]).where(tables.users.c.username == user.username)
@@ -157,4 +151,3 @@ async def propagate_like(post_id: UUID, user: models.User, author: str):
         }
     }
     await make_post_request(url, json=json)
-

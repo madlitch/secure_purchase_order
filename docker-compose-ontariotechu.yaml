@@ -7,8 +7,9 @@ services:
       - .env
     environment:
       - PORT=8081
-      - POSTGRES_P0RT=5433
+      - POSTGRES_PORT=5433
       - COMMUNITY=ontariotechu.ca
+      - SERVER_ADDRESS=http://192.168.2.133
     ports:
       - "8081:80"
     depends_on:

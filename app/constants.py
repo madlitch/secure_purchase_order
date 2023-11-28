@@ -2,9 +2,11 @@ from dotenv import load_dotenv
 import os
 import urllib.parse
 
+COMMUNITY = os.getenv('COMMUNITY')
+
 APP_ROOT = "./"
 MEDIA_ROOT = APP_ROOT + "media/"
-DATA_ROOT = APP_ROOT + "data/stringshare/"
+DATA_ROOT = os.path.join(APP_ROOT, 'data', COMMUNITY)
 
 # database info
 DB_USER = os.getenv('POSTGRES_USER')
@@ -16,10 +18,7 @@ DB_URL = "postgresql://{}:{}@db:{}/{}".format(DB_USER, DB_KEY, DB_PORT, DB_DB)
 
 SERVER_ADDRESS = os.getenv('SERVER_ADDRESS')
 SERVER_PORT = os.getenv('PORT')
-
-
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-COMMUNITY = os.getenv('COMMUNITY')
 
 
