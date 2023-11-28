@@ -17,7 +17,6 @@ async def get_url(community, endpoint):
     if community == 'stringshare.ca':
         return '{}:{}/{}'.format(SERVER_ADDRESS, '8080', endpoint)
     else:
-
         return '{}:{}/{}'.format(SERVER_ADDRESS, '8081', endpoint)
 
 
