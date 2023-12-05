@@ -28,7 +28,7 @@ community, while all StringShare instances communicate with each other to form a
 1. Once the servers are running, go to http://localhost:8080/docs (stringshare.ca) and http://localhost:8081/docs (ontariotechu.ca)
    for API documentation and endpoints
 2. Execute the '/reset_database' endpoint in both to init the database with mock data
-3. Click the 'Authorize' button in the top right, and log in using any of the usernames (you can find them in the `app/data/{COMMUNITY}/users.sql` file)
+3. Click the 'Authorize' button in the top right, and log in using any of the usernames (you can find them in the `app/data/{COMMUNITY}/users.sql` file, and the passwords are all 'a')
 
 The servers will take a few seconds to start. If they don't, you can manually start them in the Docker desktop app.
 
