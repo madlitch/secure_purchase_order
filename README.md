@@ -3,7 +3,7 @@
 ## Description
 
 StringShare is a distributed social media network where anyone can create a StringShare instance for their own
-community, while all StringShare instances communicate with each other to form a larger distributed network.
+community, while all StringShare instances communicate with each other to form a larger distributed network. 
 
 ## Run
 
