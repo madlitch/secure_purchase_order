@@ -135,6 +135,8 @@ async def propagate_comment(comment: models.Comment, user: models.User, author: 
     # Sends a user's comment to the author's community if the author is from a foreign community. It ensures comments
     # are shared across community boundaries.
     _, community = author.split('@')
+    if community == COMMUNITY:
+        return
     query = select([tables.users]).where(tables.users.c.username == user.username)
     usr = await database.fetch_one(query)
     url = await get_url(community, 'server/comment')
@@ -157,6 +159,8 @@ async def propagate_like(post_id: UUID, user: models.User, author: str):
     # Propagates a 'like' action on a post to the author's community if the author is from a foreign community,
     # ensuring likes are shared across communities.
     _, community = author.split('@')
+    if community == COMMUNITY:
+        return
     query = select([tables.users]).where(tables.users.c.username == user.username)
     usr = await database.fetch_one(query)
     url = await get_url(community, 'server/like')

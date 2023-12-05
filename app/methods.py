@@ -130,6 +130,7 @@ async def get_user_profile(username: str, user: models.User):
         .join(tables.users, tables.users.c.username == tables.posts.c.username)
         .outerjoin(comments_subquery, comments_subquery.c.post_id == tables.posts.c.post_id)
         .outerjoin(likes_subquery, likes_subquery.c.post_id == tables.posts.c.post_id)
+        .outerjoin(liked_subquery, liked_subquery.c.post_id == tables.posts.c.post_id)
         .outerjoin(tables.post_images, tables.post_images.c.post_id == tables.posts.c.post_id)
         .outerjoin(tables.post_locations, tables.post_locations.c.post_id == tables.posts.c.post_id)
     ).where(
@@ -249,6 +250,7 @@ async def get_post(post_id: UUID, user: models.User):
         .join(tables.users, tables.posts.c.username == tables.users.c.username)
         .outerjoin(comments_subquery, comments_subquery.c.post_id == tables.posts.c.post_id)
         .outerjoin(likes_subquery, likes_subquery.c.post_id == tables.posts.c.post_id)
+        .outerjoin(liked_subquery, liked_subquery.c.post_id == tables.posts.c.post_id)
         .outerjoin(tables.post_images, tables.post_images.c.post_id == tables.posts.c.post_id)
         .outerjoin(tables.post_locations, tables.post_locations.c.post_id == tables.posts.c.post_id)
     ).where(
