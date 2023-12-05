@@ -11,7 +11,12 @@ import methods
 import models
 
 
+# This file is for helper methods, used for utility purposes
+
+
 async def reset_database():
+    # Resets the database by deleting all existing data from the tables and re-populating them using SQL files stored
+    # in DATA_ROOT. This function is used for initializing or restoring the database to a default state.
     print("Resetting database...")
     await database.execute(delete(tables.communities))
     await database.execute(delete(tables.following_communities))
@@ -69,12 +74,9 @@ async def reset_database():
     print("Database Reset Complete")
 
 
-async def helper():
-    print(os.getenv('PORT'))
-    print(COMMUNITY)
-
-
 async def fix_followers():
+    # Corrects the followers data. It first clears the followers table and then repopulates it by inverting the
+    # 'following' relationships. This ensures consistency between the 'followers' and 'following' tables.
     await database.execute(delete(tables.followers))
     query = select([tables.following])
     following = await database.fetch_all(query)
@@ -86,6 +88,8 @@ async def fix_followers():
 
 
 async def populate_activity():
+    # Populates the activity table with data based on current likes, comments, and followers. This function is
+    # used to backfill activity data for existing interactions.
     likes_query = select([tables.likes])
     likes = await database.fetch_all(likes_query)
 
@@ -123,6 +127,7 @@ async def populate_activity():
 
 
 async def update_password():
+    # Updates the password for all users in the database.
     q = select([tables.users])
     users = await database.fetch_all(q)
     for user in users:
@@ -139,6 +144,7 @@ async def update_password():
 
 
 async def create_avatars():
+    # Iterates through all users and creates avatars for each.
     q = select([tables.users])
     users = await database.fetch_all(q)
     for user in users:

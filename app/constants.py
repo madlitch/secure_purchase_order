@@ -1,6 +1,8 @@
 import os
 import urllib.parse
 
+# Gets all the relevant environment variables for the application, and defines some app-wide constants
+
 COMMUNITY = os.getenv('COMMUNITY')
 
 APP_ROOT = "./"
@@ -18,6 +20,3 @@ DB_URL = "postgresql://{}:{}@db:{}/{}".format(DB_USER, DB_KEY, DB_PORT, DB_DB)
 SERVER_ADDRESS = os.getenv('SERVER_ADDRESS')
 SERVER_PORT = os.getenv('PORT')
 SECRET_KEY = os.getenv('SECRET_KEY')
-
-
-

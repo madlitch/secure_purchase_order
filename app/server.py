@@ -1,6 +1,5 @@
 from fastapi import FastAPI, Depends, status, Request, UploadFile
 from fastapi.security import OAuth2PasswordRequestForm
-from fastapi.responses import FileResponse
 from uuid import UUID
 from typing import List
 
@@ -9,24 +8,23 @@ import logging
 import random
 import string
 import helper
-import os
 
 import models
-import exceptions
 import database
-import constants
 import methods
-import network
 import auth
 
 app = FastAPI()
 
+# Configure logging to file 'info.log' with INFO level.
 logging.basicConfig(filename='info.log', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
 @app.middleware('http')
 async def log_requests(request: Request, call_next):
+    # Middleware to log HTTP requests. Generates a unique ID for each request and logs the request path and
+    # processing time.
     idem = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
     logger.info(f"rid={idem} start request path={request.url.path}")
     start_time = time.time()
@@ -39,15 +37,24 @@ async def log_requests(request: Request, call_next):
 
 @app.on_event("startup")
 async def startup():
+    # Startup event handler to connect to the database when the application starts.
     await database.database.connect()
 
 
 @app.on_event("shutdown")
 async def shutdown():
+    # Shutdown event handler to disconnect from the database when the application stops.
     await database.database.disconnect()
 
 
 # API Routes
+
+# Routes are defined with decorators specifying HTTP methods and paths (e.g., @app.get("/path")).
+# 'status_code' sets the HTTP status for successful responses (e.g., 200 OK).
+# 'response_model' defines the structure of the response data using Pydantic models.
+# 'Depends()' is used for dependency injection, in this case for user authentication.
+# Route functions handle the logic and return the response conforming to the 'response_model'.
+
 
 # Util --
 
@@ -58,11 +65,7 @@ async def reset_database():
 
 @app.get("/util")
 async def util():
-    print("helping!")
-    # await helper.helper()
-    # await helper.populate_activity()
-    # await helper.fix_followers()
-    # await helper.update_password()
+    pass
 
 
 # Auth --
@@ -73,7 +76,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     return token
 
 
-# Server --
+# Foreign Server Endpoints --
 
 @app.get("/server/search", status_code=status.HTTP_200_OK, response_model=List[models.SearchUser])
 async def search_users(search_user: models.ServerSearchUser):
@@ -159,7 +162,7 @@ async def update_avatar(file: UploadFile, current_user: models.User = Depends(au
     await methods.update_avatar(file, current_user)
 
 
-# Post, Comments, & Likes --
+# Posts, Comments, Likes, & Media --
 
 @app.get("/client/posts", status_code=status.HTTP_200_OK, response_model=List[models.PostOut])
 async def get_feed(current_user: models.User = Depends(auth.get_current_active_user)):
@@ -204,8 +207,4 @@ async def create_like(post_id: UUID, current_user: models.User = Depends(auth.ge
 
 @app.get("/client/media/", status_code=status.HTTP_200_OK)
 async def get_photo(url: str = None):
-    path = os.path.join(constants.MEDIA_ROOT, url)
-    if os.path.isfile(path):
-        return FileResponse(path)
-    else:
-        raise exceptions.API_404_NOT_FOUND_EXCEPTION
+    return await methods.get_photo(url)

@@ -6,6 +6,11 @@ import datetime
 import enum
 
 
+# These models define the data structures for various entities such as users, posts, comments, and authentication
+# tokens. They are used for data validation, serialization, and deserialization, ensuring consistent and secure data
+# handling throughout the application's different operations and interactions.
+
+
 # Auth
 class Token(BaseModel):
     access_token: str
@@ -101,10 +106,6 @@ class ActivityOut(BaseModel):
     full_name: str
     avatar_url: str
     post_id: Optional[UUID]
-
-
-class DataIn(BaseModel):
-    test: str
 
 
 class ServerSearchUser(User):

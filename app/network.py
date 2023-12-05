@@ -13,14 +13,17 @@ import models
 
 
 async def get_url(community, endpoint):
-    # mock placeholder
+    # Constructs a URL for a given community and endpoint. It's a utility function used to dynamically generate URLs
+    # for different communities. This is currently hardcoded for demonstration purposes.
     if community == 'stringshare.ca':
         return '{}:{}/{}'.format(SERVER_ADDRESS, '8080', endpoint)
     else:
         return '{}:{}/{}'.format(SERVER_ADDRESS, '8081', endpoint)
 
 
-async def make_post_request(url, json):
+async def make_post_request_json(url, json):
+    # Makes an HTTP POST request to a specified URL with JSON data. It's a generic function to send data to servers and
+    # receive a response.
     async with aiohttp.ClientSession() as session:
         async with session.post(url, json=json) as resp:
             response = await resp.json()
@@ -28,6 +31,8 @@ async def make_post_request(url, json):
 
 
 async def make_post_request_params(url, params, data):
+    # Sends an HTTP POST request with both URL parameters and data payload. It's used when both URL parameters and data
+    # need to be sent in a request.
     async with aiohttp.ClientSession() as session:
         async with session.post(url, params=params, data=data) as resp:
             response = await resp.json()
@@ -35,6 +40,8 @@ async def make_post_request_params(url, params, data):
 
 
 async def make_get_request(url, json=None, data=None):
+    # Makes an HTTP GET request to a specified URL. It can optionally include JSON data or URL parameters, and is used
+    # to retrieve data from servers.
     async with aiohttp.ClientSession() as session:
         async with session.get(url, params=data, json=json) as resp:
             response = await resp.json()
@@ -42,6 +49,8 @@ async def make_get_request(url, json=None, data=None):
 
 
 def is_user_in_community(username: str):
+    # Checks if a user's username includes the current community's domain, indicating whether the user is part of the
+    # current community.
     if '@' + COMMUNITY in username:
         return True
     else:
@@ -49,6 +58,8 @@ def is_user_in_community(username: str):
 
 
 async def search_community(search_query: str, user: models.User):
+    # Performs a search in a remote community. It constructs a URL for the search endpoint and sends a request with the
+    # search query.
     username, community = search_query.split('@')
     url = await get_url(community, 'server/search')
     json = {
@@ -60,6 +71,7 @@ async def search_community(search_query: str, user: models.User):
 
 
 async def create_foreign_user(user: models.ServerUser):
+    # Adds a user from a foreign community to the local database, if they do not already exist.
     query = tables.users.select().where(tables.users.c.username == user['username'])
     existing_user = await database.execute(query)
     if not existing_user:
@@ -73,6 +85,8 @@ async def create_foreign_user(user: models.ServerUser):
 
 
 async def follow_user(username: str, user: models.User):
+    # Initiates a follow request to a user in a foreign community. It sends a request to the foreign community's server
+    # to follow a user and updates the local database.
     _, community = username.split('@')
     query = select([tables.users]).where(tables.users.c.username == user.username)
     usr = await database.fetch_one(query)
@@ -86,12 +100,14 @@ async def follow_user(username: str, user: models.User):
             'bio': usr.bio,
         }
     }
-    foreign_user = await make_post_request(url, json=json)
+    foreign_user = await make_post_request_json(url, json=json)
     await create_foreign_user(foreign_user)
 
 
 async def propagate_post(post_id: UUID, post: str, latitude: float, longitude: float, user: models.User,
                          photo_url: str = None):
+    # Propagates a post to other communities. It sends the post data, including optional photo, to all communities that
+    # the user's community is following.
     query = select([tables.following_communities.c.community]).where(
         tables.following_communities.c.username == user.username
     )
@@ -116,6 +132,8 @@ async def propagate_post(post_id: UUID, post: str, latitude: float, longitude: f
 
 
 async def propagate_comment(comment: models.Comment, user: models.User, author: str):
+    # Sends a user's comment to the author's community if the author is from a foreign community. It ensures comments
+    # are shared across community boundaries.
     _, community = author.split('@')
     query = select([tables.users]).where(tables.users.c.username == user.username)
     usr = await database.fetch_one(query)
@@ -132,10 +150,12 @@ async def propagate_comment(comment: models.Comment, user: models.User, author: 
             'bio': usr.bio,
         }
     }
-    await make_post_request(url, json=json)
+    await make_post_request_json(url, json=json)
 
 
 async def propagate_like(post_id: UUID, user: models.User, author: str):
+    # Propagates a 'like' action on a post to the author's community if the author is from a foreign community,
+    # ensuring likes are shared across communities.
     _, community = author.split('@')
     query = select([tables.users]).where(tables.users.c.username == user.username)
     usr = await database.fetch_one(query)
@@ -149,4 +169,4 @@ async def propagate_like(post_id: UUID, user: models.User, author: str):
             'bio': usr.bio,
         }
     }
-    await make_post_request(url, json=json)
+    await make_post_request_json(url, json=json)

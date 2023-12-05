@@ -1,5 +1,7 @@
 from fastapi import HTTPException, status
 
+# Some standard exceptions
+
 API_400_BAD_REQUEST_EXCEPTION = HTTPException(
     status_code=400,
     detail="bad request",

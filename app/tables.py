@@ -3,15 +3,30 @@ from sqlalchemy.dialects.postgresql import UUID
 
 import models
 
+# This file defines the schema for the database tables used.
+
+# 'metadata': A container for all the table definitions.
+# 'users': Stores user profiles with columns like username, full name, avatar URL, and bio.
+# 'user_credentials': Contains user authentication data like hashed passwords and salts.
+# 'posts': Holds user posts with a UUID identifier, content, and timestamp.
+# 'post_locations': Stores geolocation data (latitude, longitude) for each post.
+# 'post_images': Links posts to their associated images.
+# 'likes': Tracks which users have liked which posts.
+# 'comments': Stores comments made on posts along with the commenter's username and timestamp.
+# 'followers' and 'following': Represent user relationships, indicating who follows and is followed by whom.
+# 'activity': Logs user activities (likes, comments, follows) with an action type and associated post ID.
+# 'communities': Lists different community URLs in the network.
+# 'following_communities': Tracks which user a 'community' is following.
+
+
 metadata = MetaData()
 
 users = (
     Table('users', metadata,
           Column('username', String(100), primary_key=True),
           Column('full_name', String(100)),
-          Column('avatar_url', String(500)),  # needs to be constant if user is stored on other servers
+          Column('avatar_url', String(500)),
           Column('bio', String(500)),
-          # Column('server', String(100)),
           ))
 
 user_credentials = (
