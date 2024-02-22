@@ -3,11 +3,9 @@ import urllib.parse
 
 # Gets all the relevant environment variables for the application, and defines some app-wide constants
 
-COMMUNITY = os.getenv('COMMUNITY')
-
 APP_ROOT = "./"
-MEDIA_ROOT = APP_ROOT + "media/"
-DATA_ROOT = os.path.join(APP_ROOT, 'data', COMMUNITY)
+MEDIA_ROOT = os.path.join(APP_ROOT, 'media')
+DATA_ROOT = os.path.join(APP_ROOT, 'data')
 
 # database info
 DB_USER = os.getenv('POSTGRES_USER')
