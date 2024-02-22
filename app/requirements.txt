@@ -7,7 +7,6 @@ sqlalchemy
 databases
 python-jose
 passlib
-bcrypt
 python-multipart
 bcrypt
 python-jose
@@ -16,3 +15,5 @@ aiofiles
 python-magic
 requests
 aiohttp
+pgpy
+jinja2

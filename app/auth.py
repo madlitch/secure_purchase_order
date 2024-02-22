@@ -5,9 +5,11 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from models import UserAuthIn, User, TokenData
-from tables import users, user_credentials
+from tables import users
 from database import database
 from sqlalchemy.sql import select
+from hashlib import sha256
+from base64 import urlsafe_b64encode
 
 import bcrypt
 import exceptions
@@ -15,42 +17,38 @@ import constants
 
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 300
+SALT_ROUNDS = 12
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
-def verify_password(plain_password, salt, hashed_password):
+def verify_password(plain_password, hashed_password):
     # Compares a plain password (with added salt) with a stored hashed password to validate user credentials.
-    return pwd_context.verify(plain_password + salt, hashed_password)
+    return bcrypt.checkpw(plain_password.encode("utf-8"), hashed_password.encode("utf-8"))
 
 
-def get_password_hash(password_and_salt):
+def get_password_hash(password):
     # Hashes a password combined with salt using bcrypt, used for securely storing user passwords.
-    return pwd_context.hash(password_and_salt)
+    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt(SALT_ROUNDS)).decode('utf-8')
 
 
-def gen_salt():
-    # Generates a salt string using bcrypt, enhancing the security of the hashed passwords.
-    return str(bcrypt.gensalt(10))
-
-
-async def get_user(username: str):
+async def get_user(email: str):
     # Retrieves a user's authentication information from the database, including their hashed password and salt.
-    query = select([users.join(user_credentials, users.c.username == user_credentials.c.username)]).where(
-        users.c.username == username.lower())
+    query = select([users]).where(
+        users.c.email == email.lower())
     user = await database.fetch_one(query)
     if user:
         return UserAuthIn(**user)
 
 
-async def authenticate_user(username: str, password: str):
+async def authenticate_user(email: str, password: str):
     # Authenticates a user by verifying their password. Returns the user if authentication is successful.
-    user = await get_user(username)
+    user = await get_user(email)
     if not user:
         return False
-    if not verify_password(password, user.salt, user.hashed_password):
+    if not verify_password(password, user.password):
         return False
     return user
 
@@ -72,13 +70,13 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     # is invalid.
     try:
         payload = jwt.decode(token, constants.SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = payload.get("sub")
-        if username is None:
+        email: str = payload.get("sub")
+        if email is None:
             raise exceptions.API_401_CREDENTIALS_EXCEPTION
-        token_data = TokenData(username=username)
+        token_data = TokenData(email=email)
     except JWTError:
         raise exceptions.API_401_CREDENTIALS_EXCEPTION
-    user = await get_user(username=token_data.username)
+    user = await get_user(email=token_data.email)
     if user is None:
         raise exceptions.API_401_CREDENTIALS_EXCEPTION
     return user
@@ -97,11 +95,23 @@ async def login(form_data):
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
+            detail="Incorrect email or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={"sub": user.username}, expires_delta=access_token_expires
+        data={"sub": user.email}, expires_delta=access_token_expires
     )
     return {"access_token": access_token, "token_type": "bearer"}
+
+
+async def get_derived_key(password, salt):
+    bcrypt_hash = bcrypt.hashpw(password.encode('utf-8'), salt)
+    sha256_hash = sha256(bcrypt_hash).digest()
+    key = urlsafe_b64encode(sha256_hash)
+
+    return key
+
+
+async def gensalt():
+    return bcrypt.gensalt(SALT_ROUNDS)

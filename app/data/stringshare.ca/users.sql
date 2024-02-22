@@ -1,6 +1,0 @@
-insert into public.users (username, full_name, avatar_url, bio)
-values  ('kdjakovic4@stringshare.ca', 'Katleen Djakovic', 'kdjakovic4@stringshare.ca.png', 'Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero.'),
-        ('glawfull3@stringshare.ca', 'Gilburt Lawfull', 'glawfull3@stringshare.ca.png', 'Curabitur gravida nisi at nibh. In hac habitasse platea dictumst. Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem.'),
-        ('lleece0@stringshare.ca', 'Lacee Leece', 'lleece0@stringshare.ca.png', 'hello'),
-        ('ifinders1@stringshare.ca', 'Ignaz Finders', 'ifinders1@stringshare.ca.png', 'Quisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus.'),
-        ('cacres2@stringshare.ca', 'Corene Acres', 'cacres2@stringshare.ca.png', 'In hac habitasse platea dictumst. Morbi vestibulum, velit id pretium iaculis, diam erat fermentum justo, nec condimentum neque sapien placerat ante. Nulla justo.');
