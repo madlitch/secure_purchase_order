@@ -1,0 +1,32 @@
+@font-face {
+    font-family: 'The Neue';
+    src: url("TheNeue-Black.woff") format('woff');
+}
+
+.theNeue {
+    font-family: "The Neue", sans-serif;
+}
+
+body {
+    font-family: "Arial Unicode MS", sans-serif;
+}
+
+/*h1, h2, h3 {*/
+/*    font-family: "The Neue", sans-serif;*/
+/*}*/
+
+.dropShadow {
+    border-radius: 5px;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.5), 0 12px 40px 0 rgba(0, 0, 0, 0.19);
+}
+
+.content-fit {
+    white-space: nowrap;
+    width: 1%;
+}
+
+.alert svg {
+    vertical-align: middle;
+    width: 1.2em;
+    height: 1.2em;
+}

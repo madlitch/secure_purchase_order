@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Purchase Orders</h2>
+        <a href="/new_purchase_order">
+            <button type="button" class="btn btn-primary">New Purchase Order</button>
+        </a>
+    </div>
+    <div class="container mt-3">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Number</th>
+                <th>Sender</th>
+                <th>Recipient</th>
+                <th>Sent</th>
+                <th>Status</th>
+                <th>Reviewed</th>
+                <th>Purchaser</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for order in purchase_orders %}
+            <tr>
+                <td>{{ order.purchase_order_number }}</td>
+                <td>{{ order.sender_first_name }} {{ order.sender_last_name }}</td>
+                <td>{{ order.receiver_first_name }} {{ order.receiver_last_name }}</td>
+                <td>{{ order.sent_timestamp | format_datetime() }}</td>
+                {% if order.status == true %}
+                <td class="text-success">Accepted</td>
+                {% elif order.status == false %}
+                <td class="text-danger">Rejected</td>
+                {% else %}
+                <td>In Review</td>
+                {% endif %}
+                <td>{{ order.approved_timestamp | format_datetime() or 'In Review' }}</td>
+                <td>{{ order.purchaser or 'N/A' }}</td>
+                {% if user.user_id == order.recipient_id %}
+                <td>
+                    <a href="/purchase_orders/{{ order.purchase_order_id }}">
+                        <button type="button" class="btn btn-primary btn-sm">View</button>
+                    </a>
+                </td>
+                {% else %}
+                <td></td>
+                {% endif %}
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="8">No purchase orders found.</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

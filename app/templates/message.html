@@ -1,13 +1,14 @@
 {% extends "base.html" %}
 
-{% block title %}Secure Company Home{% endblock %}
+{% block title %} {{ title }} {% endblock %}
 
 {% block content %}
 <div class="min-vw-100 min-vh-100 w-100 position-relative"
      style="background-image: url('/static/secure_company_inc.jpg'); background-repeat: no-repeat; background-size: cover; background-position: center">
-    <div class="position-absolute top-50 start-50 translate-middle">
-<!--        <h3 class="text-white">Welcome to Secure Company Inc.</h3>-->
-<!--        <h5 class="text-white">Welcome to Secure Company Inc.</h5>-->
+    <div class="container pt-5 text-white">
+        <h1>{{ header }}</h1>
+        <p>{{ message }}</p>
     </div>
 </div>
+
 {% endblock %}
