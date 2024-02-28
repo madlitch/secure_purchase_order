@@ -1,0 +1,60 @@
+-- all passwords are 'm' except for super visor which is 's'
+
+
+insert into public.users (user_id, email, first_name, last_name, public_key, password, date_created, date_updated, level)
+values  ('8555a11a-47a6-455c-ae21-3fea4f528a61', 'massimo.albanese@outlook.com', 'Massimo', 'Albanese', '-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+xsBNBGXaNpEBCACgf5/J7PoQ9uh5vCokDyaNin7MAegPIMPXdSzLhaJmPrskXSzr
+hbAkeWVHRFoDGbmARmvwt79j4GuVoiS8EbBvJ3mck5//LY9XZdRCjuE9zJlDKoiE
+OBUOosQN6rQVStmTWb9yiiRYxbhb0uOljm7w3T4JJrvhCx1yFLVQ7c1fa6H4s0q2
+pOBAVnRKbkSTzd2QpzAk7i0UPC8RTumD4JIWb9Noa6cGcPrBzuX40kvWCHAFLkOv
+DQ9SKRfHh/DShPYYcGQxKuorv1fRXIPhT5lSsHZc4BMMHhhAGKBjG/0Q5KAtmjG0
+ez0lBv3ITPG4ger4JIQTok5vFn6cT3VZo4dPABEBAAHNL01hc3NpbW8gQWxiYW5l
+c2UgPG1hc3NpbW8uYWxiYW5lc2VAb3V0bG9vay5jb20+wsCCBBMBCAAsBQJl2jaS
+AhsGAgsJAhUIAhYCAh4BFiEEj4zTb0hdegZOmKuLSxieObT/n2wACgkQSxieObT/
+n2wmSQf/Xnk0DfR5Jv9LMlLMxF2AnnokFmWONDnErbOhekFPVfBijpA9BIoM8eq5
+iJyBXZA+I0WCyoes77ipHUuA7v0jBELO3l8jikHad9xle4r818PVN0NjNPAMD6/b
+amjZYJldazPKIT8S7KdzLygbzjdCNfXrqOzw8mVuNC4tyiIIIjiOOOWkNKRGKg4d
+z/iWnOJdDpitvBRWacZgXM+MQJr/XWad54wd2ww96cFk+0gw96CpKN4INCmL2Lpq
+gWVfPfCVvbBFtGdpIp1t6lgtnXubnAGmbU7HGv02EOdQeDbUtrBJfTyHV/3iXnFc
+Z8gFZGOhvGt8Pmz/VZwdwJtTLPP2Ug==
+=c3xu
+-----END PGP PUBLIC KEY BLOCK-----
+', '$2b$12$fOfsWY5eInafmQTqcJDc9Os.x1R4Iw3iSAH2NSKBNtLrIwuJS7SQ6', '2024-02-24 18:33:53.981001', '2024-02-24 18:33:53.981001', null),
+        ('4486db66-042a-44ea-8910-251d77918aaf', 'user.youser@securecompany.com', 'User', 'Youser', '-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+xsBNBGXaQcoBCAC6NIS4UKVfxFVR/8X/xYXMkv07H/rxl03cc5FF7W3xVTcfZULv
+NHVhAEvuKKDtPzc6cumOzi0PQaZiOUU4RpDfblxUQvqSBEdi8Le+kgYSlX8OHVqC
+Gl8lfvbh37GrsBaoE7/kZe4+kVW63kAv3lZrQZetVVUwvfifNSBTNEP9mVeR7ceX
+qehPDUyKaFvGbXZq4/InERTVvbTpzAf7REVjnFX1m7IA1Tp3VRP+k6vfkh3N/3+b
+IVL2gq7etb7Ue6mxKQqwIy4ygv55iF5ZXFc5oWhS6ivEXuxqLbcoqeq+0Od+OBWV
+IgA5ZKTh1lNK/eskzFPf1cbWKGUYtD1leQhLABEBAAHNK1VzZXIgWW91c2VyIDx1
+c2VyLnlvdXNlckBzZWN1cmVjb21wYW55LmNvbT7CwIIEEwEIACwFAmXaQcoCGwYC
+CwkCFQgCFgICHgEWIQT3B6aoRcF/qAv8rB3+V0ccn7WqLgAKCRD+V0ccn7WqLt2O
+B/4+lnOIpRckmtoqecnGnBb+isq6rsaNTN6xormngYgDoPdVkeVLw5lBaruGF3sR
+whhqEPQv9iNfSRv5IlrukLzMzIylyTJynDsGLq7vrcoCie2GpQNm1Cvof6zsj61o
+n9lhKnXZo6IkXqKxrGkBZh1gotZTmroJ3YpGvS3kBOTTQuJxu+RDgU6HrJKJp7Vu
+EjCbFsz84YBUoSxKVjj6RbpKpbfBaFgb8I4Lajt9XG4dFGiGQ196B5lWjwmCGRtw
+fUqPZUohLoC5jAdS+VUjqan0yQ56QtGAW7WkBqdSni3B+K1yRMPNOjI0lUbpzYJS
+117NOo8pK59aHIv+jJ+9qwFg
+=WifS
+-----END PGP PUBLIC KEY BLOCK-----
+', '$2b$12$X7UbQ/CLsOE1q6EPKwtw2.8bp1vGqNZrZw19gDoFMi9DAeWIM9GDW', '2024-02-24 19:28:00.580134', '2024-02-24 19:28:00.580134', null),
+        ('1d4b450d-984b-414e-9874-5e801412068c', 's@s.s', 'Super', 'Visor', '-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+xsBNBGXaKU8BCACVWapMqJhFWC0XRmqu4bnqCiBuXri0vCJXnrz2BmCO09LT6LfU
+XUvltTtiEOai47HCh0J8ie4aeXfDtk9fkuBSelrgYCUkIWFWuv0+aqAYn3bLmgkd
+c5m3d3ODGyL+IoNuwCPHZ+yoKg+kz0NzNA4AwiK6cq8Ormthcpac9MqjFwzcmanU
+jkgqwPu4LaH0320UNquHFlizM77EitvwE2SdKabYH7+Ouno2UchMjTqeK0Kz+PpT
+U8ByVEWh/WsGYKG4s/qRtBqxY/on41aS+ClPGZi28K+bWtgJ0mYUCuCRKL2C37ur
+HUoSfdGBS3LmP5N8NQSpqm6gbiz2vjfg5HlPABEBAAHNEVN1cGVyIFZpc29yIDxz
+QHM+wsCCBBMBCAAsBQJl2ilPAhsGAgsJAhUIAhYCAh4BFiEEk6LyOZ2nT+FGdtcQ
+7FL0aXcWg8oACgkQ7FL0aXcWg8okgAf/c6cTEwXkweEy3QVMaSQsuOewufSJEQqk
+wWJhpH9xkhJClCbsfbALrfkmh6QLtNsR1gf3uSmLWCTkrYhu9thT2fglzffxyTHv
+NX4winy17PyxMUXLvPix+AC/oja6JruOWD4B6bBMvJX4gpU4MtRzlrt1Hs/J/f7Q
+yAUq7XP3sfvr05k+fhr3mH56QpN2T9De+KSZYTxKNSb5Amf476dOkRhZxFIn9zn5
+pN326aO2P/9sKlGxD2HvLZ4IyVecS8jf1KDVyak/cvRgzzeKMWWp6feVqaXi6mQP
++7r+mlx0Uc7uAc2E/UNRfigRXvM/4gCUq4RtiwkJ1MjW6yhKJMx6KQ==
+=pFya
+-----END PGP PUBLIC KEY BLOCK-----
+', '$2b$12$S/WopQ9kWDldZh36/maRF.E6LjBb17A2l08f3SEiLb1gK4LE/KMZu', '2024-02-24 17:37:19.538679', '2024-02-24 17:37:19.538679', null);

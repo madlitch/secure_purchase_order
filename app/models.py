@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from typing import Optional, Any, List, Dict
 from uuid import UUID
 
@@ -32,5 +32,15 @@ class UserIn(User):
     password: str
 
 
+class UserSys(User):
+    user_id: UUID
+
+
 class UserAuthIn(User):
     password: str
+
+
+class EmailSchema(BaseModel):
+    email: List[EmailStr]
+    body: str
+    subject: str
