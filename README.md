@@ -3,7 +3,7 @@
 ## Description
 
 The project is a secure purchase order management system developed with FastAPI, PostgreSQL, Bootstrap, and Docker,
-featuring encrypted communications compatible with OpenPGP clients. It automates PGP key management, secures
+featuring encrypted email communications compatible with OpenPGP capable clients. It automates PGP key management, secures
 transactions with dual-signature protocols, and employs PGPy for cryptographic integrity, including verifiable
 timestamps to ensure transaction authenticity.
 
