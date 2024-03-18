@@ -9,9 +9,9 @@ import requests
 from uuid import UUID
 from fastapi_mail import FastMail, MessageSchema, ConnectionConfig, MessageType
 from fastapi import Request, BackgroundTasks
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, RedirectResponse
 from sqlalchemy.sql import select, insert, update, or_, delete
-from sqlalchemy import func
+from sqlalchemy import func, desc
 from pgpy import PGPKey, PGPMessage
 from pgpy.constants import PubKeyAlgorithm, KeyFlags, HashAlgorithm, SymmetricKeyAlgorithm, CompressionAlgorithm
 from typing import List
@@ -99,7 +99,7 @@ async def get_public_key(user_id):
 async def get_users_by_role(role_name: str):
     query = select([tables.users]).select_from(
         tables.users.join(tables.user_roles).join(tables.roles)
-    ).where(tables.roles.c.role_name == role_name)
+    ).where(or_(tables.roles.c.role_name == role_name, tables.roles.c.role_name == "Admin"))
     return await database.fetch_all(query)
 
 
@@ -111,6 +111,7 @@ async def get_purchase_order(po_id: uuid):
 async def get_purchase_orders_by_user(user):
     sender = tables.users.alias('sender')
     recipient = tables.users.alias('receiver')
+    purchaser = tables.users.alias('purchaser')
 
     if user['role'] == "Admin":
         query = select([
@@ -119,11 +120,14 @@ async def get_purchase_orders_by_user(user):
             sender.c.last_name.label('sender_last_name'),
             recipient.c.first_name.label('receiver_first_name'),
             recipient.c.last_name.label('receiver_last_name'),
+            purchaser.c.first_name.label('purchaser_first_name'),
+            purchaser.c.last_name.label('purchaser_last_name'),
         ]).select_from(
             tables.purchase_orders
             .join(sender, tables.purchase_orders.c.sender_id == sender.c.user_id)
             .join(recipient, tables.purchase_orders.c.recipient_id == recipient.c.user_id)
-        )
+            .outerjoin(purchaser, tables.purchase_orders.c.purchaser_id == purchaser.c.user_id)
+        ).order_by(desc(tables.purchase_orders.c.purchase_order_number))
         return await database.fetch_all(query)
     else:
         query = select([
@@ -132,20 +136,24 @@ async def get_purchase_orders_by_user(user):
             sender.c.last_name.label('sender_last_name'),
             recipient.c.first_name.label('receiver_first_name'),
             recipient.c.last_name.label('receiver_last_name'),
+            purchaser.c.first_name.label('purchaser_first_name'),
+            purchaser.c.last_name.label('purchaser_last_name'),
         ]).select_from(
             tables.purchase_orders
             .join(sender, tables.purchase_orders.c.sender_id == sender.c.user_id)
             .join(recipient, tables.purchase_orders.c.recipient_id == recipient.c.user_id)
+            .outerjoin(purchaser, tables.purchase_orders.c.purchaser_id == purchaser.c.user_id)
         ).where(
             or_(
                 tables.purchase_orders.c.sender_id == user['user_id'],
                 tables.purchase_orders.c.recipient_id == user['user_id'],
+                tables.purchase_orders.c.purchaser_id == user['user_id'],
             )
-        )
+        ).order_by(desc(tables.purchase_orders.c.purchase_order_number))
         return await database.fetch_all(query)
 
 
-async def download_private_key(user, password: str):
+async def download_private_key(user, password: str, request, templates):
     private_key, salt = await get_private_key_and_salt(user['user_id'])
     derived_key = await auth.get_derived_key(password, salt.encode('utf-8'))
     print(derived_key.decode('utf-8'))
@@ -165,8 +173,8 @@ async def download_private_key(user, password: str):
                 "Content-Disposition": "attachment; filename={}_private_key.asc".format(name)
             })
     except Exception as e:
-        # TODO handle error for wrong password
-        raise e
+        return await message(request, user, templates, "Wrong Password", "Wrong Password")
+        print(e)
 
 
 async def download_public_key(user_id):
@@ -183,6 +191,7 @@ async def download_public_key(user_id):
 
 
 async def send_email(sender, body, recipient):
+    pass
     message = MessageSchema(
         subject="Purchase Order Request from {}".format(sender),
         recipients=[recipient],
@@ -268,6 +277,9 @@ async def submit_purchase_order(
     recipient_public_key = PGPKey()
     recipient_public_key.parse(recipient.public_key)
 
+    sender_public_key = PGPKey()
+    sender_public_key.parse(sender.public_key)
+
     private_key, salt = await get_private_key_and_salt(sender.user_id)
 
     derived_key = await auth.get_derived_key(password, salt.encode('utf-8'))
@@ -283,25 +295,35 @@ async def submit_purchase_order(
         with sender_private_key.unlock(derived_key):
             with server_private_key.unlock(constants.SERVER_PRIVATE_KEY_PW):
                 po_id = uuid.uuid4()
+
                 email_content = PGPMessage.new(
                     format_purchase_order(data, "{}/purchase_orders/{}".format(constants.SERVER_ADDRESS, po_id)))
-
-                email_content |= server_private_key.sign(email_content)
-                email_content |= sender_private_key.sign(email_content)
-                encrypted_signed_email = recipient_public_key.encrypt(email_content)
-
                 json_content = PGPMessage.new(json.dumps(data))
 
+                email_content |= server_private_key.sign(email_content)
                 json_content |= server_private_key.sign(json_content)
+
+                email_content |= sender_private_key.sign(email_content)
                 json_content |= sender_private_key.sign(json_content)
-                encrypted_signed_json = recipient_public_key.encrypt(json_content)
+
+                cipher = pgpy.constants.SymmetricKeyAlgorithm.AES256
+                sessionkey = cipher.gen_key()
+
+                encrypted_json = sender_public_key.encrypt(json_content, cipher=cipher, sessionkey=sessionkey)
+                encrypted_json = recipient_public_key.encrypt(encrypted_json, cipher=cipher, sessionkey=sessionkey)
+                # encrypted_json = purchaser_public_key.encrypt(decrypted_json)
+
+                encrypted_email = sender_public_key.encrypt(email_content, cipher=cipher, sessionkey=sessionkey)
+                encrypted_email = recipient_public_key.encrypt(encrypted_email, cipher=cipher, sessionkey=sessionkey)
+
+                del sessionkey
 
                 query = tables.purchase_orders.insert().values(
                     purchase_order_id=po_id,
                     sender_id=sender.user_id,
                     recipient_id=recipient.user_id,
-                    email_content=str(encrypted_signed_email),
-                    json_content=str(encrypted_signed_json),
+                    email_content=str(encrypted_email),
+                    json_content=str(encrypted_json),
                 )
                 await database.execute(query)
 
@@ -312,7 +334,7 @@ async def submit_purchase_order(
 
                 await send_email(
                     sender=sender_name,
-                    body=str(encrypted_signed_email),
+                    body=str(encrypted_email),
                     recipient=recipient.email
                 )
                 del derived_key
@@ -326,8 +348,8 @@ async def submit_purchase_order(
                     "message": "Purchase Order #{} Successfully Submitted".format(po_number)
                 })
     except Exception as e:
-        # TODO add logic that catches wrong password
-        raise e
+        return await message(request, user, templates, "Wrong Password", "Wrong Password")
+        print(e)
 
 
 def prepare_items_with_index(items):
@@ -339,6 +361,7 @@ def prepare_items_with_index(items):
 async def view_purchase_order(request, templates, po_id, user, password: str):
     po = await get_purchase_order(po_id)
     sender = await auth.get_user_by_id(po.sender_id)
+    supervisor = await auth.get_user_by_id(po.recipient_id)
 
     private_key, salt = await get_private_key_and_salt(user['user_id'])
     derived_key = await auth.get_derived_key(password, salt.encode('utf-8'))
@@ -349,29 +372,158 @@ async def view_purchase_order(request, templates, po_id, user, password: str):
     sender_public_key.parse(sender.public_key)
     server_public_key, _ = pgpy.PGPKey.from_file(constants.SERVER_PUBLIC_KEY)
 
+    supervisor_public_key = PGPKey()
+    supervisor_public_key.parse(supervisor.public_key)
+
     assert user_private_key.is_unlocked is False
 
     try:
         with user_private_key.unlock(derived_key):
-            message = PGPMessage.from_blob(po.json_content)
+            encrypted_message = PGPMessage.from_blob(po.json_content)
 
-            decrypted_message = user_private_key.decrypt(message)
+            decrypted_message = user_private_key.decrypt(encrypted_message)
 
             content = json.loads(decrypted_message.message)
             items = prepare_items_with_index(content['purchase_order']['items'])
+            timestamp = ""
+
+            if po.reviewed_timestamp is not None:
+                timestamp = po.reviewed_timestamp.strftime('%Y-%m-%d %H:%M:%S')
+
+            purchasers = await get_users_by_role("Purchaser")
+
+            valid_sender_signature = False
+            valid_server_signature = False
+            valid_supervisor_signature = False
+            try:
+                valid_sender_signature = bool(sender_public_key.verify(decrypted_message))
+            except Exception as e:
+                pass
+            try:
+                valid_server_signature = bool(server_public_key.verify(decrypted_message))
+            except Exception as e:
+                pass
+            try:
+                valid_supervisor_signature = bool(supervisor_public_key.verify(decrypted_message))
+            except Exception as e:
+                pass
 
             return templates.TemplateResponse("purchase_order.html", {
                 "request": request,
                 "user": user,
                 "title": "Purchase Order {}".format(po.purchase_order_number),
                 "header": "Purchase Order {}".format(po.purchase_order_number),
+                "recipient_id": po.recipient_id,
                 "data": content,
-                "valid_sender_signature": bool(sender_public_key.verify(decrypted_message)),
-                "valid_server_signature": bool(server_public_key.verify(decrypted_message)),
-                "items": items
-
+                "valid_sender_signature": valid_sender_signature,
+                "valid_server_signature": valid_server_signature,
+                "valid_supervisor_signature": valid_supervisor_signature,
+                "items": items,
+                "purchasers": purchasers,
+                "po_id": po_id,
+                "status": po.status,
+                "reviewed_timestamp": timestamp
             })
 
     except Exception as e:
-        # TODO handle error for wrong password
-        raise e
+        return await message(request, user, templates, "Wrong Password", "Wrong Password")
+        print(e)
+
+
+async def review_purchase_order(request, templates, po_id, user, purchaser_id, password, accept):
+    po = await get_purchase_order(po_id)
+    purchaser = await auth.get_user_by_id(purchaser_id)
+    sender = await auth.get_user_by_id(po.sender_id)
+
+    private_key, salt = await get_private_key_and_salt(user['user_id'])
+    derived_key = await auth.get_derived_key(password, salt.encode('utf-8'))
+    supervisor_private_key = PGPKey()
+    supervisor_private_key.parse(private_key)
+
+    supervisor_public_key = PGPKey()
+    supervisor_public_key.parse(user['public_key'])
+
+    purchaser_public_key = PGPKey()
+    purchaser_public_key.parse(purchaser.public_key)
+
+    sender_public_key = PGPKey()
+    sender_public_key.parse(sender.public_key)
+
+    server_private_key, _ = pgpy.PGPKey.from_file(constants.SERVER_PRIVATE_KEY)
+    assert server_private_key.is_unlocked is False
+
+    try:
+        with supervisor_private_key.unlock(derived_key):
+            with server_private_key.unlock(constants.SERVER_PRIVATE_KEY_PW):
+                json_content = PGPMessage.from_blob(po.json_content)
+                email_content = PGPMessage.from_blob(po.email_content)
+
+                decrypted_json = supervisor_private_key.decrypt(json_content)
+                decrypted_email = supervisor_private_key.decrypt(email_content)
+
+                json_content = PGPMessage.new(decrypted_json.message)
+                email_content = PGPMessage.new(decrypted_email.message)
+
+                json_content |= supervisor_private_key.sign(json_content)
+                email_content |= supervisor_private_key.sign(email_content)
+
+                json_content |= server_private_key.sign(json_content)
+                email_content |= server_private_key.sign(email_content)
+
+                cipher = pgpy.constants.SymmetricKeyAlgorithm.AES256
+                sessionkey = cipher.gen_key()
+
+                encrypted_json = supervisor_public_key.encrypt(json_content, cipher=cipher, sessionkey=sessionkey)
+                encrypted_json = purchaser_public_key.encrypt(encrypted_json, cipher=cipher, sessionkey=sessionkey)
+                encrypted_json = sender_public_key.encrypt(encrypted_json, cipher=cipher, sessionkey=sessionkey)
+
+                encrypted_email = supervisor_public_key.encrypt(email_content, cipher=cipher, sessionkey=sessionkey)
+                encrypted_email = purchaser_public_key.encrypt(encrypted_email, cipher=cipher, sessionkey=sessionkey)
+                encrypted_email = sender_public_key.encrypt(encrypted_email, cipher=cipher, sessionkey=sessionkey)
+
+                del sessionkey
+
+                time = datetime.utcnow()
+
+                if accept:
+                    query = tables.purchase_orders.update().where(
+                        tables.purchase_orders.c.purchase_order_id == po_id).values(
+                        purchaser_id=purchaser.user_id,
+                        email_content=str(encrypted_email),
+                        json_content=str(encrypted_json),
+                        reviewed_timestamp=time,
+                        status=accept
+                    )
+                    await database.execute(query)
+
+                    sender_name = "{} {}".format(user['first_name'], user['last_name'])
+                    await send_email(
+                        sender=sender_name,
+                        body=str(encrypted_email),
+                        recipient=purchaser.email
+                    )
+                else:
+                    query = tables.purchase_orders.update().where(
+                        tables.purchase_orders.c.purchase_order_id == po_id).values(
+                        email_content=str(encrypted_email),
+                        json_content=str(encrypted_json),
+                        reviewed_timestamp=time,
+                        status=accept
+                    )
+                    await database.execute(query)
+
+                return RedirectResponse(url="/purchase_orders", status_code=301)
+
+    except Exception as e:
+        return await message(request, user, templates, "Wrong Password", "Wrong Password")
+        print(e)
+
+
+async def message(request, user, templates, header, message):
+    return templates.TemplateResponse("message.html", {
+        "request": request,
+        "user": user,
+        "title": header,
+        "header": header,
+        "message": message
+    })

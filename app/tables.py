@@ -40,11 +40,10 @@ purchase_orders = (
           Column('purchase_order_number', Integer, primary_key=True, autoincrement=True),
           Column('sender_id', UUID, ForeignKey('users.user_id', ondelete='cascade')),
           Column('recipient_id', UUID, ForeignKey('users.user_id', ondelete='cascade')),
+          Column('purchaser_id', UUID, ForeignKey('users.user_id', ondelete='cascade')),
           Column('email_content', TEXT),
           Column('json_content', TEXT),
-          Column('sender_signature', TEXT),
-          Column('supervisor_signature', TEXT),
           Column('sent_timestamp', DateTime, server_default=func.now()),
-          Column('approved_timestamp', DateTime),
+          Column('reviewed_timestamp', DateTime),
           Column('status', Boolean)
           ))
