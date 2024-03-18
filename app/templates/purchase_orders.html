@@ -38,9 +38,9 @@
                 {% else %}
                 <td>In Review</td>
                 {% endif %}
-                <td>{{ order.approved_timestamp | format_datetime() or 'In Review' }}</td>
-                <td>{{ order.purchaser or 'N/A' }}</td>
-                {% if user.user_id == order.recipient_id %}
+                <td>{{ order.reviewed_timestamp | format_datetime() or 'In Review' }}</td>
+                <td>{{ order.purchaser_first_name or '' }} {{ order.purchaser_last_name or 'N/A' }}</td>
+                {% if user.user_id == order.recipient_id or user.user_id == order.sender_id or user.user_id == order.purchaser_id  %}
                 <td>
                     <a href="/purchase_orders/{{ order.purchase_order_id }}">
                         <button type="button" class="btn btn-primary btn-sm">View</button>

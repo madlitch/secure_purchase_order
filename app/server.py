@@ -137,33 +137,19 @@ async def users(request: Request, user: models.User = Depends(auth.get_current_u
             "users": users
         })
     else:
-        return templates.TemplateResponse("message.html", {
-            "request": request,
-            "user": user,
-            "title": "Not Authenticated",
-            "header": "Not Authenticated",
-            "message": "Please log in first."
-        })
+        return await methods.message(request, user, templates, "Not Authenticated", "Please login first.")
 
 
 @app.get("/create_user", response_class=HTMLResponse)
 async def create_user(request: Request, user: models.User = Depends(auth.get_current_user)):
     if user:
-        users = await methods.get_users()
-
         return templates.TemplateResponse("create_user.html", {
             "request": request,
             "user": user,
             "title": "Create User"
         })
     else:
-        return templates.TemplateResponse("message.html", {
-            "request": request,
-            "user": user,
-            "title": "Not Authenticated",
-            "header": "Not Authenticated",
-            "message": "Please log in first."
-        })
+        return await methods.message(request, user, templates, "Not Authenticated", "Please login first.")
 
 
 @app.post("/create_user", response_class=HTMLResponse)
@@ -214,13 +200,7 @@ async def public_key(request: Request, user_id: UUID, user: models.User = Depend
         public_key = await methods.get_public_key(user_id)
         return PlainTextResponse(public_key)
     else:
-        return templates.TemplateResponse("message.html", {
-            "request": request,
-            "user": user,
-            "title": "Not Authenticated",
-            "header": "Not Authenticated",
-            "message": "Please log in first."
-        })
+        return await methods.message(request, user, templates, "Not Authenticated", "Please login first.")
 
 
 @app.get("/download_public_key", response_class=HTMLResponse)
@@ -228,13 +208,7 @@ async def download_public_key(request: Request, user_id: UUID, user: models.User
     if user:
         return await methods.download_public_key(user_id)
     else:
-        return templates.TemplateResponse("message.html", {
-            "request": request,
-            "user": user,
-            "title": "Not Authenticated",
-            "header": "Not Authenticated",
-            "message": "Please log in first."
-        })
+        return await methods.message(request, user, templates, "Not Authenticated", "Please login first.")
 
 
 @app.get("/private_key", response_class=HTMLResponse)
@@ -247,27 +221,15 @@ async def private_key(request: Request, user: models.User = Depends(auth.get_cur
             "action": "/download_private_key"
         })
     else:
-        return templates.TemplateResponse("message.html", {
-            "request": request,
-            "user": user,
-            "title": "Not Authenticated",
-            "header": "Not Authenticated",
-            "message": "Please log in first."
-        })
+        return await methods.message(request, user, templates, "Not Authenticated", "Please login first.")
 
 
 @app.post("/download_private_key")
 async def private_key(request: Request, user: models.User = Depends(auth.get_current_user), password: str = Form(...)):
     if user:
-        return await methods.download_private_key(user, password)
+        return await methods.download_private_key(user, password, request, templates)
     else:
-        return templates.TemplateResponse("message.html", {
-            "request": request,
-            "user": user,
-            "title": "Not Authenticated",
-            "header": "Not Authenticated",
-            "message": "Please log in first."
-        })
+        return await methods.message(request, user, templates, "Not Authenticated", "Please login first.")
 
 
 @app.get("/derived_key")
@@ -280,13 +242,7 @@ async def a(request: Request, password: str, user: models.User = Depends(auth.ge
         # TODO find way to display the derived key
         # return await methods.download_private_key(user, password)
     else:
-        return templates.TemplateResponse("message.html", {
-            "request": request,
-            "user": user,
-            "title": "Not Authenticated",
-            "header": "Not Authenticated",
-            "message": "Please log in first."
-        })
+        return await methods.message(request, user, templates, "Not Authenticated", "Please login first.")
 
 
 @app.get("/purchase_orders", response_class=HTMLResponse)
@@ -301,13 +257,7 @@ async def purchase_orders(request: Request, user: models.User = Depends(auth.get
             "purchase_orders": pos
         })
     else:
-        return templates.TemplateResponse("message.html", {
-            "request": request,
-            "user": user,
-            "title": "Not Authenticated",
-            "header": "Not Authenticated",
-            "message": "Please log in first."
-        })
+        return await methods.message(request, user, templates, "Not Authenticated", "Please login first.")
 
 
 @app.get("/purchase_orders/{po_id}", response_class=HTMLResponse)
@@ -315,7 +265,7 @@ async def purchase_orders(request: Request, po_id: uuid.UUID, user: models.User 
     if user:
         po = await methods.get_purchase_order(po_id)
 
-        if user['user_id'] == po.recipient_id:
+        if user['user_id'] == po.recipient_id or user['user_id'] == po.sender_id or user['user_id'] == po.purchaser_id:
             return templates.TemplateResponse("check_password.html", {
                 "request": request,
                 "user": user,
@@ -323,51 +273,10 @@ async def purchase_orders(request: Request, po_id: uuid.UUID, user: models.User 
                 "action": "/view_purchase_order/{}".format(po_id)
             })
         else:
-            return templates.TemplateResponse("message.html", {
-                "request": request,
-                "user": user,
-                "title": "Not Authorized",
-                "header": "Not Authorized",
-                "message": "You are not authorized to view this purchase."
-            })
+            return await methods.message(request, user, templates, "Not Authorized",
+                                         "You are not authorized to view this purchase.")
     else:
-        return templates.TemplateResponse("message.html", {
-            "request": request,
-            "user": user,
-            "title": "Not Authenticated",
-            "header": "Not Authenticated",
-            "message": "Please log in first."
-        })
-
-
-@app.post("/view_purchase_order/{po_id}", response_class=HTMLResponse)
-async def purchase_orders(
-        request: Request,
-        po_id: uuid.UUID,
-        user: models.User = Depends(auth.get_current_user),
-        password: str = Form(...)
-):
-    if user:
-        po = await methods.get_purchase_order(po_id)
-
-        if user['user_id'] == po.recipient_id:
-            return await methods.view_purchase_order(request, templates, po_id, user, password)
-        else:
-            return templates.TemplateResponse("message.html", {
-                "request": request,
-                "user": user,
-                "title": "Not Authorized",
-                "header": "Not Authorized",
-                "message": "You are not authorized to view this purchase."
-            })
-    else:
-        return templates.TemplateResponse("message.html", {
-            "request": request,
-            "user": user,
-            "title": "Not Authenticated",
-            "header": "Not Authenticated",
-            "message": "Please log in first."
-        })
+        return await methods.message(request, user, templates, "Not Authenticated", "Please login first.")
 
 
 @app.get("/new_purchase_order", response_class=HTMLResponse)
@@ -380,13 +289,47 @@ async def purchase(request: Request, user: models.User = Depends(auth.get_curren
             "supervisors": supervisors
         })
     else:
-        return templates.TemplateResponse("message.html", {
-            "request": request,
-            "user": user,
-            "title": "Not Authenticated",
-            "header": "Not Authenticated",
-            "message": "Please log in first."
-        })
+        return await methods.message(request, user, templates, "Not Authenticated", "Please login first.")
+
+
+@app.post("/view_purchase_order/{po_id}", response_class=HTMLResponse)
+async def purchase_orders(
+        request: Request,
+        po_id: uuid.UUID,
+        user: models.User = Depends(auth.get_current_user),
+        password: str = Form(...)
+):
+    if user:
+        po = await methods.get_purchase_order(po_id)
+
+        if user['user_id'] == po.recipient_id or user['user_id'] == po.sender_id or user['user_id'] == po.purchaser_id:
+            return await methods.view_purchase_order(request, templates, po_id, user, password)
+        else:
+            return await methods.message(request, user, templates, "Not Authorized",
+                                         "You are not authorized to view this purchase.")
+    else:
+        return await methods.message(request, user, templates, "Not Authenticated", "Please login first.")
+
+
+@app.post("/review_purchase_order/{po_id}", response_class=HTMLResponse)
+async def purchase_orders(
+        request: Request,
+        po_id: uuid.UUID,
+        user: models.User = Depends(auth.get_current_user),
+        purchaser_id: uuid.UUID = Form(...),
+        accept: bool = Form(...),
+        password: str = Form(...)
+):
+    if user:
+        po = await methods.get_purchase_order(po_id)
+
+        if user['user_id'] == po.recipient_id:
+            return await methods.review_purchase_order(request, templates, po_id, user, purchaser_id, password, accept)
+        else:
+            return await methods.message(request, user, templates, "Not Authorized",
+                                         "You are not authorized to view this purchase.")
+    else:
+        return await methods.message(request, user, templates, "Not Authenticated", "Please login first.")
 
 
 @app.post("/purchase")

@@ -44,7 +44,7 @@ async def get_user_by_id(user_id: str):
 
 
 async def get_user_by_email(email: str):
-    query = select([users]).where(
+    query = select(users).where(
         users.c.email == email.lower())
     user = await database.fetch_one(query)
     return user
