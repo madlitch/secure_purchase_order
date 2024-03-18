@@ -1,5 +1,7 @@
 # Secure Purchase Order
 
+![Secure Company Inc.](app/static/secure_company_inc.jpg)
+
 ## Description
 
 The project is a secure purchase order management system developed with FastAPI, PostgreSQL, Bootstrap, and Docker,

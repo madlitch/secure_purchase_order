@@ -114,7 +114,6 @@ async def get_current_user(request: Request):
     return user
 
 
-
 async def get_current_user_from_token(token: str = Depends(oauth2_scheme)):
     # Extracts and verifies the JWT token to retrieve the current user's information. Throws an exception if the token
     # is invalid.
