@@ -31,4 +31,4 @@ timestamps to ensure transaction authenticity.
 8. Set up Supervisor and Purchaser emails in an OpenPGP capable email client (e.g. Thunderbird)
 9. Download relevant public keys from Users tab
 10. Add the private and public keys to Thunderbird
-11. Enjoy
+11. Enjoy.
